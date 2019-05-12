@@ -32,8 +32,12 @@ typedef struct          s_flags
 typedef struct			s_mod
 {
 	int					min_wid;
+	int					arg_num;
+	int					precision;
 	int					cur_size;
+	char				len_mod;
 	char				frmt_spec;
+	t_flags				*flags;
 }						t_mod;
 
 typedef	struct 			s_arg_node
@@ -66,20 +70,48 @@ int	    		ft_vprintf(const char *input, va_list ap);
 int	    		ft_asprintf(char **str, const char *input, ...);
 int	    		ft_vasprintf(char **str, const char *input, va_list ap);
 void        	catch_error(char *s1, t_printf *clean);
-void			arg_node_init(t_printf *info, void *indata);
-void			str_node_init(t_printf *info);
-t_printf        *t_printf_init(char *in);
-char            *build_str(t_printf *info);
-void    		handle_mod(t_printf *info, va_list ap);
-void        	fill_node(t_printf *info, int len);
-t_mod           *t_mod_init(t_printf *info);
 
-/**
- * Modification Checks
- * modifiers.c
- **/
-int     		check_arg(char *str, int i);
-int     		is_len_mod(char *str, int i);
-char     		invalid_conv_spec(char *str, int i);
+/*
+** General Node Functions
+**	node_init.c
+*/
+t_flags         *t_flags_init(t_printf *info, t_mod *mod);
+t_mod           *t_mod_init(t_printf *info);
+void            clean_tprintf(t_printf *info);
+t_printf        *t_printf_init(char *in);
+
+/*
+** String Node Functions
+** str_node.c
+*/
+char            *build_str(t_printf *info);
+void        	add_string(t_printf *info, char *str);
+void        	fill_node(t_printf *info, int len);
+void			str_node_init(t_printf *info);
+
+/*
+** Argument Node Functions
+** arg_node.c
+*/
+int         handle_mult_arg(t_printf *info, va_list ap);
+int         add_next_arg(t_printf *info, va_list ap);
+void        arg_node_init(t_printf *info, void *indata);
+
+/*
+** Various check functions
+** is_check_functions.c
+*/
+int     is_conv(char q);
+int     is_flag(char q);
+int     is_len_mod(char *str, int i);
+char    is_invalid_conv_spec(char *str, int i);
+int     check_arg(char *str, int i);
+
+/*
+** Modification Checks
+** modifiers.c
+*/
+int    			read_number(t_printf *info);
+void    		handle_mod(t_printf *info, va_list ap);
 
 #endif

@@ -12,54 +12,110 @@
 
 #include "includes/ft_printf.h"
 
-int     is_conv(char q)
+int    read_number(t_printf *info)
 {
-    return (q == 'd' || q == 'i' || q == 'o' || q == 'u' || q == 'x' || q == 'X' || q == 'f' || q == 's');
+    char temp[10];
+    int i;
+
+    i = 0;
+    while (ft_isnum(INPUT[INDEX]))
+        temp[i++] = INPUT[INDEX++];
+    i = ft_atoi((char*)&temp);
+    return (i);
 }
 
-int     is_flag(char q)
+void    handle_percent(t_printf *info)
 {
-    return (q == '#' || q == '0' || q == '-' || q == '+');
+    str_node_init(info);
+    fill_node(info, 1);
 }
 
-int     is_len_mod(char *str, int i)
+void    handle_flags(t_printf *info, t_mod *mod)
 {
-    if (str[i] == 'l' || str[i] == 'L')
+    t_flags *temp;
+    temp = t_flags_init(info, mod);
+    while (is_flag(INPUT[INDEX]))
     {
-        if (str[i + 1] == 'l')
-            return (2);
-        return (1);
+        if (INPUT[INDEX] == '#')
+            temp->hash = '1';
+        if (INPUT[INDEX] == '-')
+            temp->minus = '1';
+        if (INPUT[INDEX] == '+')
+            temp->plus = '1';
+        if (INPUT[INDEX] == '0')
+            temp->zero = '1';
+        INDEX++;
     }
-    else if (str[i] == 'h') 
-    {
-        if (str[i + 1] == 'h')
-            return (2);
-        return (1);
-    }
-    return (0);
+    mod->flags = temp;
 }
 
-char     is_invalid_conv_spec(char *str, int i)
+void    handle_precision(t_printf *info, t_mod *mod)
 {
-    while (!(ft_isalpha(str[i])))
-        i++;
-    i += is_len_mod(str, i);    
-    if (is_conv(str[i]))
-        return (str[i]);
+    INDEX++;
+    if (ft_isnum(INPUT[INDEX]))
+        mod->precision = read_number(info);
     else
-        return ('E');
+        mod->precision = 0;
+    
 }
 
-int     check_arg(char *str, int i)
+char    *handle_string(t_printf *info, int arg_num)
 {
-    if (ft_isnum(str[i]))
-    {
-        while (ft_isnum(str[i]))
-            i++;
-        if (str[i] == '$')
-            return (1);
-    }
-    return (0);
+    t_arg_node *temp;
+
+    INDEX++;
+    temp = info->arg_begin;
+    while (temp->index != arg_num)
+        temp = temp->next;
+    return ((char*)temp->data);
+}
+
+char    *handle_len_mod(t_printf *info)
+{
+    int i;
+    char *res;
+    
+    res = NULL;
+    i = info->len;
+    return (res);
+}
+
+char    *handle_num(t_printf *info)
+{
+    int i;
+    char *res;
+    
+    res = NULL;
+    i = info->len;
+    return (res);
+}
+
+void    create_mod_string(t_printf *info, t_mod *mod)
+{
+    char *res_string;
+    char *temp;
+    int  res_len;
+    int i;
+
+    res_len = 0;
+    i = 0;
+    if (mod->frmt_spec == 's')
+        temp = handle_string(info, mod->arg_num);
+    else if (mod->len_mod == '1')
+        temp = handle_len_mod(info);
+    else
+        temp = handle_num(info);
+    res_len = ft_strlen(temp);
+    if (res_len < mod->min_wid)
+        i = mod->min_wid;
+    else
+        i = res_len;
+    res_string = ft_memalloc(i + 1);
+    i = -1;
+    while (++i < res_len)
+        res_string[i] = temp[i];
+    res_string[i] = '\0';
+    add_string(info, res_string);
 }
 
 void    handle_mod(t_printf *info, va_list ap)
@@ -67,13 +123,26 @@ void    handle_mod(t_printf *info, va_list ap)
     t_mod *temp;
 
     temp = t_mod_init(info);
-    info->input[info->in++];
-    if ((temp->frmt_spec = invalid_conv_spec(INPUT, INDEX)) == 'E')
+    INDEX++;
+    if ((temp->frmt_spec = is_invalid_conv_spec(INPUT, INDEX)) == 'E')
         catch_error("Invalid Conversion Specification", info);
-    if (check_arg(INPUT, INDEX))
-        //handle_arg(info, ap);
-    if (is_flag(INPUT[INDEX]))
-        //handle_flags(info);
-    if (is_min_width());
-        //handle_min_width
+    if (temp->frmt_spec == '%')
+        handle_percent(info);
+    else
+    {
+        if (check_arg(INPUT, INDEX))
+            temp->arg_num = handle_mult_arg(info, ap);
+        else
+            temp->arg_num = add_next_arg(info, ap);
+        if (is_flag(INPUT[INDEX]))
+            handle_flags(info, temp);
+        if (ft_isnum(INPUT[INDEX]))
+            temp->min_wid = read_number(info);
+        if (INPUT[INDEX] == '.')
+            handle_precision(info, temp);
+        if (is_len_mod(INPUT, INDEX))
+            temp->len_mod = '1';
+        create_mod_string(info, temp);
+    }
+    free(temp);
 }

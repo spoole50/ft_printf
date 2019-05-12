@@ -12,6 +12,24 @@
 
 #include "includes/ft_printf.h"
 
+int         handle_mult_arg(t_printf *info, va_list ap)
+{
+    int i;
+
+    i = read_number(info);
+    if (i > info->max_args)
+        info->max_args = i;
+    while (info->cur_args < info->max_args)
+        add_next_arg(info, ap);
+    return (i);
+}
+
+int         add_next_arg(t_printf *info, va_list ap)
+{
+    arg_node_init(info, (void*)va_arg(ap, void*));
+    return (++info->cur_args);
+}
+
 void        arg_node_init(t_printf *info, void *indata)
 {
     t_arg_node  *temp;
@@ -21,6 +39,7 @@ void        arg_node_init(t_printf *info, void *indata)
         catch_error("t_arg_node initialization error", info);
     temp->index = info->cur_args + 1;
     temp->data = indata;
+    temp->next = NULL;
     if (info->arg_begin == NULL)
         info->arg_begin = temp;
     else

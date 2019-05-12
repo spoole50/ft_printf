@@ -15,6 +15,9 @@
 
 int		main(void)
 {
-	ft_printf("Test This%$2d%d",1, 2);
+	//ft_printf("This %s seeing if string additon works\n", "is a test");
+	//ft_printf("%s %s", "this", "is");
+	ft_printf("%s\n", "abc");
+	ft_printf("%s  ", "this is a string");
 	exit(0);
 }

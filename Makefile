@@ -16,7 +16,7 @@ NAME = libftprintf.a
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -g
 
-FILES = ft_printf.c ft_vasprintf.c node_init.c arg_node.c str_node.c
+FILES = ft_printf.c ft_vasprintf.c node_init.c arg_node.c str_node.c modifier.c is_check_functions.c
 LIBFT = includes/Libft/
 
 all : $(NAME)

@@ -15,16 +15,32 @@
 char            *build_str(t_printf *info)
 {
     char        *result;
+    char        *clean;
     t_str_node  *temp;
 
     result = NULL;
+    clean = NULL;
     temp = info->str_begin;
     while (temp != NULL)
     {
+        clean = result;
         result = ft_strjoin(result, temp->str);
+        if (clean != NULL)
+            free(clean);
         temp = temp->next;
     }
     return (result);
+}
+
+void        add_string(t_printf *info, char *str)
+{
+    t_str_node *temp;
+
+    str_node_init(info);
+    temp = info->str_begin;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->str = str;
 }
 
 void        fill_node(t_printf *info, int len)
@@ -42,7 +58,7 @@ void        fill_node(t_printf *info, int len)
     temp->str[temp->i] = '\0';
 }
 
-void        str_node_init(t_printf *info, int len)
+void        str_node_init(t_printf *info)
 {
     t_str_node  *temp;
     t_str_node  *iter;

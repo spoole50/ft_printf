@@ -15,10 +15,7 @@
 
 void    catch_error(char *s1, t_printf *clean)
 {
-    if (clean != NULL)
-    {
-        free(clean);
-    }
+    clean_tprintf(clean);
     ft_putstr(s1);
     exit(EXIT_FAILURE);
 }
@@ -54,5 +51,6 @@ int		ft_vasprintf(char **str, const char *input, va_list ap)
 			handle_mod(info, ap);		
 	}
 	*str = build_str(info);
+	clean_tprintf(info);
 	return (count);
 }

@@ -12,6 +12,22 @@
 
 #include "includes/ft_printf.h"
 
+t_flags         *t_flags_init(t_printf *info, t_mod *mod)
+{
+    t_flags *temp;
+
+    if ((temp = (t_flags*)malloc(sizeof(t_flags))) == NULL)
+    {
+        free(mod);
+        catch_error("t_flags init error", info);
+    }
+    temp->hash = '0';
+    temp->minus = '0';
+    temp->plus = '0';
+    temp->zero = '0';
+    return (temp);
+}
+
 t_mod           *t_mod_init(t_printf *info)
 {
     t_mod *temp;
@@ -19,9 +35,46 @@ t_mod           *t_mod_init(t_printf *info)
     if ((temp = (t_mod*)malloc(sizeof(t_mod))) == NULL)
         catch_error("t_mod init error", info);
     temp->min_wid = 0;
+    temp->arg_num = 0;
+    temp->precision = -1;
     temp->cur_size = 0;
     temp->frmt_spec = ' ';
+    temp->len_mod = '0';
+    temp->flags = NULL;
     return (temp);
+}
+
+void            clean_tprintf(t_printf *info)
+{
+    t_str_node *clean_str;
+    t_str_node *temp_str;
+    t_arg_node *clean_arg;
+    t_arg_node *temp_arg;
+
+    if (info == NULL)
+        return;
+    if (info->str_begin != NULL)
+    {
+        clean_str = info->str_begin;
+        while (clean_str != NULL)
+        {
+            free(clean_str->str);
+            temp_str = clean_str->next;
+            free(clean_str);
+            clean_str = temp_str;
+        }
+    }
+    if (info->arg_begin != NULL)
+    {
+        clean_arg = info->arg_begin;
+        while (clean_arg != NULL)
+        {
+            temp_arg = clean_arg->next;
+            free(clean_arg);
+            clean_arg = temp_arg;
+        }
+    }
+    free(info);
 }
 
 t_printf        *t_printf_init(char *in)
