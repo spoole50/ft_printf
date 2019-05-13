@@ -47,29 +47,38 @@ typedef	struct 			s_arg_node
 	struct s_arg_node	*next;
 }						t_arg_node;
 
-typedef struct 			s_str_node
-{
-	int					i;
-	char				*str;
-	struct s_str_node	*next;
-}						t_str_node;
-
 typedef struct  		s_printf
 {
-	int					len;
 	int					in;
     int                 cur_args;
 	int					max_args;
 	char				*input;
-	t_str_node			*str_begin;
+	char				*result;
 	t_arg_node			*arg_begin;
 }						t_printf;
 
+/*
+** Printf main function definition
+** ft_printf.c
+*/
 int	    		ft_printf(const char *input, ...);
 int	    		ft_vprintf(const char *input, va_list ap);
 int	    		ft_asprintf(char **str, const char *input, ...);
+
+/*
+** ft_vasprintf main program entry functions
+** ft_vasprintf.c
+*/
 int	    		ft_vasprintf(char **str, const char *input, va_list ap);
 void        	catch_error(char *s1, t_printf *clean);
+
+/*
+** String Task Functions
+** str_tasks.c
+*/
+int		next_percent(t_printf *info);
+void    add_string(t_printf *info, char *s1);
+void	add_text(t_printf *info, int len);
 
 /*
 ** General Node Functions
@@ -79,15 +88,6 @@ t_flags         *t_flags_init(t_printf *info, t_mod *mod);
 t_mod           *t_mod_init(t_printf *info);
 void            clean_tprintf(t_printf *info);
 t_printf        *t_printf_init(char *in);
-
-/*
-** String Node Functions
-** str_node.c
-*/
-char            *build_str(t_printf *info);
-void        	add_string(t_printf *info, char *str);
-void        	fill_node(t_printf *info, int len);
-void			str_node_init(t_printf *info);
 
 /*
 ** Argument Node Functions

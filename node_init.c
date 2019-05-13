@@ -46,24 +46,11 @@ t_mod           *t_mod_init(t_printf *info)
 
 void            clean_tprintf(t_printf *info)
 {
-    t_str_node *clean_str;
-    t_str_node *temp_str;
     t_arg_node *clean_arg;
     t_arg_node *temp_arg;
 
     if (info == NULL)
         return;
-    if (info->str_begin != NULL)
-    {
-        clean_str = info->str_begin;
-        while (clean_str != NULL)
-        {
-            free(clean_str->str);
-            temp_str = clean_str->next;
-            free(clean_str);
-            clean_str = temp_str;
-        }
-    }
     if (info->arg_begin != NULL)
     {
         clean_arg = info->arg_begin;
@@ -83,12 +70,11 @@ t_printf        *t_printf_init(char *in)
 
     if ((temp = (t_printf*)malloc(sizeof(t_printf))) == NULL)
         catch_error("t_printf initialization error", NULL);
-    temp->len = 0;
     temp->in = 0;
     temp->input = in;
     temp->cur_args = 0;
     temp->max_args = 0;
-    temp->str_begin = NULL;
+    temp->result = NULL;
     temp->arg_begin = NULL;
     return (temp);
 }

@@ -20,16 +20,6 @@ void    catch_error(char *s1, t_printf *clean)
     exit(EXIT_FAILURE);
 }
 
-int		next_percent(t_printf *info)
-{
-	int i;
-
-	i = info->in;
-	while (info->input[i] != '\0' && info->input[i] != '%')
-		i++;
-	return (i - info->in);
-}
-
 int		ft_vasprintf(char **str, const char *input, va_list ap)
 {
 	t_printf	*info;
@@ -43,14 +33,11 @@ int		ft_vasprintf(char **str, const char *input, va_list ap)
 	{
 		count = next_percent(info);
 		if (count > 0)
-		{
-			str_node_init(info);
-			fill_node(info, count);
-		}
+			add_text(info, count);
 		else
 			handle_mod(info, ap);		
 	}
-	*str = build_str(info);
+	*str = info->result;
 	clean_tprintf(info);
 	return (count);
 }

@@ -26,8 +26,7 @@ int    read_number(t_printf *info)
 
 void    handle_percent(t_printf *info)
 {
-    str_node_init(info);
-    fill_node(info, 1);
+    add_text(info, 1);
 }
 
 void    handle_flags(t_printf *info, t_mod *mod)
@@ -76,7 +75,7 @@ char    *handle_len_mod(t_printf *info)
     char *res;
     
     res = NULL;
-    i = info->len;
+    i = info->in;
     return (res);
 }
 
@@ -86,9 +85,11 @@ char    *handle_num(t_printf *info)
     char *res;
     
     res = NULL;
-    i = info->len;
+    i = info->in;
     return (res);
 }
+
+
 
 void    create_mod_string(t_printf *info, t_mod *mod)
 {
