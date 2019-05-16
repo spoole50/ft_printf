@@ -1,0 +1,5 @@
+#Exclude mac Finder DS_Store
+*.DS_Store*
+
+#Exclude vscode
+.vscode 
