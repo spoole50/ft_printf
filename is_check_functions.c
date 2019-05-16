@@ -12,10 +12,38 @@
 
 #include "includes/ft_printf.h"
 
+int     is_space(char q)
+{
+    return (q == 32 || q == 11 || q == 9);
+}
+
+
+int     is_signed(char q)
+{
+    return (q == 'd' || q == 'i');
+}
+
+int     is_unsigned(char q)
+{
+    return (q == 'o' || q == 'u' || q == 'x' || q == 'X');
+}
+
+int     is_text(char q)
+{
+    return (q == 's' || q == 'c');
+}
+int     is_float(char q)
+{
+    return (q == 'f');
+}
+
+int     is_other(char q)
+{
+    return (q == '%');
+}
 int     is_conv(char q)
 {
-    return (q == 'd' || q == 'i' || q == 'o' || q == 'u' || q == 'x'\
-    || q == 'X' || q == 'f' || q == 's' || q == '%');
+    return (is_signed(q) || is_unsigned(q) || is_text(q) || is_float(q) || is_other(q));
 }
 
 int     is_flag(char q)
@@ -25,9 +53,9 @@ int     is_flag(char q)
 
 int     check_arg(char *str, int i)
 {
-    if (ft_isnum(str[i]))
+    if (ft_isnum(str[i]) || is_space(str[i]))
     {
-        while (ft_isnum(str[i]))
+        while (ft_isnum(str[i]) || is_space(str[i]))
             i++;
         if (str[i] == '$')
             return (1);
@@ -52,13 +80,16 @@ int     is_len_mod(char *str, int i)
     return (0);
 }
 
-char     is_invalid_conv_spec(char *str, int i)
+int     is_invalid_conv_spec(char *str, int i)
 {
-    while (!(ft_isalpha(str[i])))
-        i++;
-    i += is_len_mod(str, i);    
-    if (is_conv(str[i]))
-        return (str[i]);
+    int x;
+
+    x = i;
+    while (!(ft_isalpha(str[x])))
+        x++;
+    i += is_len_mod(str, x);    
+    if (is_conv(str[x]))
+        return (x - i);
     else
-        return ('E');
+        return (-1);
 }

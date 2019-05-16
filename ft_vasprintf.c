@@ -38,6 +38,7 @@ int		ft_vasprintf(char **str, const char *input, va_list ap)
 			handle_mod(info, ap);		
 	}
 	*str = info->result;
+	count = ft_strlen(info->result);
 	clean_tprintf(info);
 	return (count);
 }

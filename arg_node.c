@@ -21,6 +21,9 @@ int         handle_mult_arg(t_printf *info, va_list ap)
         info->max_args = i;
     while (info->cur_args < info->max_args)
         add_next_arg(info, ap);
+    while (INPUT[INDEX] != '$')
+        INDEX++;
+    INDEX++;
     return (i);
 }
 

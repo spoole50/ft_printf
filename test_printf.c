@@ -14,6 +14,6 @@
 
 int		main(void)
 {
-	printf("%2$d%d\n", 1, 2);
+	printf("Test 5: %5c\n", 'c');
 	return (0);
 }

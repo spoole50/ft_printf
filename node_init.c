@@ -38,9 +38,12 @@ t_mod           *t_mod_init(t_printf *info)
     temp->arg_num = 0;
     temp->precision = -1;
     temp->cur_size = 0;
+    temp->res_i = 0;
     temp->frmt_spec = ' ';
     temp->len_mod = '0';
     temp->flags = NULL;
+    temp->res = NULL;
+    temp->arg_text = 0;
     return (temp);
 }
 

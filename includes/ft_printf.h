@@ -35,8 +35,11 @@ typedef struct			s_mod
 	int					arg_num;
 	int					precision;
 	int					cur_size;
+	int					res_i;
 	char				len_mod;
 	char				frmt_spec;
+	char				*arg_text;
+	char				*res;
 	t_flags				*flags;
 }						t_mod;
 
@@ -101,11 +104,23 @@ void        arg_node_init(t_printf *info, void *indata);
 ** Various check functions
 ** is_check_functions.c
 */
+int     is_space(char q);
+int     is_signed(char q);
+int     is_unsigned(char q);
+int     is_text(char q);
+int     is_float(char q);
+int     is_other(char q);
 int     is_conv(char q);
 int     is_flag(char q);
 int     is_len_mod(char *str, int i);
-char    is_invalid_conv_spec(char *str, int i);
+int	    is_invalid_conv_spec(char *str, int i);
 int     check_arg(char *str, int i);
+
+/*
+** Create Modification String
+** mod_string.c
+*/
+void    mod_string_char(t_printf *info, t_mod *mod);
 
 /*
 ** Modification Checks
@@ -113,5 +128,6 @@ int     check_arg(char *str, int i);
 */
 int    			read_number(t_printf *info);
 void    		handle_mod(t_printf *info, va_list ap);
+void    		set_string(t_mod *mod);
 
 #endif
