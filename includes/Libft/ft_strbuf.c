@@ -33,14 +33,14 @@ char	*ft_strbuf(char *s1, size_t pad)
 	ft_bzero(result, x);
 	if (result == NULL)
 		return (NULL);
-    if (s1 != NULL)
-    {
-        while (s1[i] != '\0')
-        {
-            result[i] = s1[i];
-            i++;
-        }
-        free(s1);
-    }
+	if (s1 != NULL)
+	{
+		while (s1[i] != '\0')
+		{
+			result[i] = s1[i];
+			i++;
+		}
+		free(s1);
+	}
 	return (result);
 }

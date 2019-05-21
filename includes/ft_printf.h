@@ -36,8 +36,8 @@ typedef struct			s_mod
 	int					precision;
 	int					cur_size;
 	int					res_i;
-	char				len_mod;
 	char				frmt_spec;
+	char				len_mod[2];
 	char				*arg_text;
 	char				*res;
 	t_flags				*flags;
@@ -52,6 +52,7 @@ typedef	struct 			s_arg_node
 
 typedef struct  		s_printf
 {
+	int					tot_writes;
 	int					in;
     int                 cur_args;
 	int					max_args;
@@ -121,6 +122,8 @@ int     check_arg(char *str, int i);
 ** mod_string.c
 */
 void    mod_string_char(t_printf *info, t_mod *mod);
+void    mod_string_signed(t_printf *info, t_mod *mod);
+void    mod_string_unsigned(t_printf *info, t_mod *mod);
 
 /*
 ** Modification Checks

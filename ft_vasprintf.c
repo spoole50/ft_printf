@@ -38,7 +38,8 @@ int		ft_vasprintf(char **str, const char *input, va_list ap)
 			handle_mod(info, ap);		
 	}
 	*str = info->result;
-	count = ft_strlen(info->result);
+	//count = ft_strlen(info->result);
+	count = info->tot_writes;
 	clean_tprintf(info);
 	return (count);
 }

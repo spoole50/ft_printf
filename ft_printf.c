@@ -21,13 +21,16 @@ int			ft_printf(const char *input, ...)
 	va_list ap;
 	char	*output;
 	int		result;
+	int 	i;
 
-	result = 0;
+	result = i = 0;
 	output = NULL;
 	va_start(ap, input);
 	result = ft_vasprintf(&output, input, ap);
 	va_end(ap);
-	ft_putstr(output);
+	while (i < result)
+		ft_putchar(output[i++]);
+	//ft_putstr(output);
 	free(output);
 	return (result);
 }

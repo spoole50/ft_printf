@@ -27,6 +27,7 @@ void    add_string(t_printf *info, char *s1)
     char *clean;
 
     clean = info->result;
+	info->tot_writes += ft_strlen(s1);
     info->result = ft_strjoin(info->result, s1);
     free(s1);
     free(clean);
@@ -47,6 +48,7 @@ void	add_text(t_printf *info, int len)
 	temp[i] = '\0';
 	clean = info->result;
 	info->result = ft_strjoin(info->result, temp);
+	info->tot_writes += i;
 	free(clean);
 	free(temp);
 }

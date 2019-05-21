@@ -30,11 +30,6 @@ int    read_number(t_printf *info)
     return (i);
 }
 
-void    handle_percent(t_printf *info)
-{
-    add_text(info, 1);
-}
-
 void    handle_flags(t_printf *info, t_mod *mod)
 {
     t_flags *temp;
@@ -65,16 +60,6 @@ void    handle_precision(t_printf *info, t_mod *mod)
         mod->precision = 0;
 }
 
-char    *handle_len_mod(t_printf *info)
-{
-    int i;
-    char *res;
-    
-    res = NULL;
-    i = info->in;
-    return (res);
-}
-
 char    *handle_num(t_printf *info)
 {
     int i;
@@ -92,6 +77,9 @@ void    arg_to_string(t_mod* mod)
     i = 0;
     while (mod->arg_text[i] != '\0')
             mod->res[mod->res_i++] = mod->arg_text[i++];
+    if (*(mod->arg_text) == '\0' && i == 0 && mod->frmt_spec == 'c')
+        mod->res[mod->res_i++] = (char)0;
+
 }
 
 void    set_string(t_mod *mod)
@@ -141,6 +129,15 @@ int     count_empty(char *str)
     return (i);
 }
 
+void    handle_len_mod(t_printf *info, t_mod *mod)
+{
+    int i;
+
+    i = 0;
+    while (!(is_conv(INPUT[INDEX])))
+        mod->len_mod[i++] = INPUT[INDEX++];
+}
+
 void    validate_conv_spec(t_printf *info, t_mod *mod)
 {
     int len;
@@ -163,7 +160,7 @@ void    parse_spec(t_printf *info, t_mod *mod)
         else if(INPUT[INDEX] == '.')
             handle_precision(info, mod);
         else if (is_len_mod(INPUT, INDEX))
-            mod->len_mod = '1';
+            handle_len_mod(info, mod);
         else
             INDEX++;
     }
@@ -178,18 +175,21 @@ void    handle_mod(t_printf *info, va_list ap)
     INDEX++;
     validate_conv_spec(info, mod);
     if (is_other(mod->frmt_spec))
-        handle_percent(info);
-    if (check_arg(INPUT, INDEX))
-        mod->arg_num = handle_mult_arg(info, ap);
+        mod->arg_text = "%";
     else
-        mod->arg_num = add_next_arg(info, ap);
+    {
+        if (check_arg(INPUT, INDEX))
+            mod->arg_num = handle_mult_arg(info, ap);
+        else
+            mod->arg_num = add_next_arg(info, ap);
+    }
     parse_spec(info, mod);
-    if (is_text(mod->frmt_spec))
+    if (is_text(mod->frmt_spec) || is_other(mod->frmt_spec))
         mod_string_char(info, mod);
     else if (is_signed(mod->frmt_spec))
-        ;//mod_string_signed(info, mod);
+        mod_string_signed(info, mod);
     else if (is_unsigned(mod->frmt_spec))
-        ;//mod_string_signed(info, mod);
+        mod_string_unsigned(info, mod);
     else if (is_float(mod->frmt_spec))
         ;//mod_string_float(info, mod);
     free(mod);

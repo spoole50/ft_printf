@@ -14,6 +14,6 @@
 
 int		main(void)
 {
-	printf("Test 5: %5c\n", 'c');
+	printf("%ld", 2147483649);
 	return (0);
 }

@@ -85,9 +85,9 @@ int     is_invalid_conv_spec(char *str, int i)
     int x;
 
     x = i;
-    while (!(ft_isalpha(str[x])))
+    while (!(ft_isalpha(str[x])) && !(is_conv(str[x])))
         x++;
-    i += is_len_mod(str, x);    
+    x += is_len_mod(str, x);    
     if (is_conv(str[x]))
         return (x - i);
     else

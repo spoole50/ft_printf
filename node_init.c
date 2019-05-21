@@ -40,10 +40,11 @@ t_mod           *t_mod_init(t_printf *info)
     temp->cur_size = 0;
     temp->res_i = 0;
     temp->frmt_spec = ' ';
-    temp->len_mod = '0';
     temp->flags = NULL;
     temp->res = NULL;
     temp->arg_text = 0;
+    temp->len_mod[0] = '0';
+    temp->len_mod[1] = '0';
     return (temp);
 }
 
@@ -73,6 +74,7 @@ t_printf        *t_printf_init(char *in)
 
     if ((temp = (t_printf*)malloc(sizeof(t_printf))) == NULL)
         catch_error("t_printf initialization error", NULL);
+    temp->tot_writes = 0;
     temp->in = 0;
     temp->input = in;
     temp->cur_args = 0;
