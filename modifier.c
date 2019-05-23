@@ -191,6 +191,6 @@ void    handle_mod(t_printf *info, va_list ap)
     else if (is_unsigned(mod->frmt_spec))
         mod_string_unsigned(info, mod);
     else if (is_float(mod->frmt_spec))
-        ;//mod_string_float(info, mod);
+        mod_string_float(info, mod);
     free(mod);
 }

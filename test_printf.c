@@ -14,6 +14,6 @@
 
 int		main(void)
 {
-	printf("%ld", 2147483649);
+	printf("%f", 42.0);
 	return (0);
 }

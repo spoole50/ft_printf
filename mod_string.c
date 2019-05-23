@@ -30,19 +30,14 @@ void    string_precision(t_mod *mod)
 void    mod_string_char(t_printf *info, t_mod *mod)
 {
     char        *temp;
-    char        c;
     t_arg_node  *arg;
 
-    c = ' ';
     temp = NULL;
     arg = info->arg_begin;
     while (arg->index != mod->arg_num)
         arg = arg->next;
     if (mod->frmt_spec == 'c')
-    {
-        c = (char)arg->data;
-        mod->arg_text = &c;
-    }
+        mod->arg_text = (char*)&arg->data;
     else if (arg->data == NULL)
         mod->arg_text = "(null)";
     else
@@ -53,15 +48,20 @@ void    mod_string_char(t_printf *info, t_mod *mod)
     add_string(info, mod->res);
 }
 
+t_arg_node      *find_arg(t_arg_node *begin, int arg_num)
+{
+    while (begin->index != arg_num)
+        begin = begin->next;
+    return (begin);
+}
+
 void    mod_string_signed(t_printf *info, t_mod *mod)
 {
     t_arg_node *arg;
     char *temp;
 
-    arg = info->arg_begin;
+    arg = find_arg(info->arg_begin, mod->arg_num);
     temp = NULL;
-    while (arg->index != mod->arg_num)
-        arg = arg->next;
     if (mod->len_mod[0] == '0')
         temp = ft_itoa((int)arg->data);
     if (mod->len_mod[0] == 'l')
@@ -124,9 +124,7 @@ void    mod_string_unsigned(t_printf *info, t_mod *mod)
     char *temp;
 
     temp = NULL;
-    arg = info->arg_begin;
-    while (arg->index != mod->arg_num)
-        arg = arg->next;
+    arg = find_arg(info->arg_begin, mod->arg_num);
     if (mod->frmt_spec == 'o')
         temp = unsigned_len_mod(arg, mod, 8);
     else if (mod->frmt_spec == 'u')
@@ -136,4 +134,18 @@ void    mod_string_unsigned(t_printf *info, t_mod *mod)
     if (mod->frmt_spec == 'x')
         lower(temp);
     add_string(info, temp);
-} 
+}
+
+void    mod_string_float(t_printf *info, t_mod *mod)
+{
+    t_arg_node *arg;
+    char *temp;
+    long double *p;
+
+    temp = NULL;
+    arg = find_arg(info->arg_begin, mod->arg_num);
+    p = (long double*)arg->data;
+    temp = ft_ftoa(*p, mod->precision);
+    add_string(info, temp);
+    free(temp);
+}
