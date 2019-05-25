@@ -33,6 +33,11 @@ int		main(void)
 	//printf("@moulitest: %+.10d\n", 42);
 	//ft_printf("%05x\n", 42);
 	//printf("%05x\n", 42);
-	printf("%5%");
+	//ft_printf("%+++d\n", 534);
+	//printf("%+++d\n", 534);
+	ft_printf("%05.1u %3.4hu %-4.7u\n", 45, (unsigned short)-1789, 147);
+	printf("%05.1u %3.4hu %-4.7u\n", 45, (unsigned short)-1789, 147);
+	//ft_printf("%.0i\n", 10);
+	//printf("%.0i\n", 10);
 	return (0);
 }

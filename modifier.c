@@ -44,6 +44,8 @@ void    handle_flags(t_printf *info, t_mod *mod)
             temp->plus = '1';
         if (INPUT[INDEX] == '0')
             temp->zero = '1';
+        if (is_space(INPUT[INDEX]))
+            temp->space = 1;
         INDEX++;
     }
     mod->flags = temp;

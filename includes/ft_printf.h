@@ -27,6 +27,7 @@ typedef struct          s_flags
     char                zero;
     char                plus;
     char                minus;
+	char				space;
 }                       t_flags;
 
 typedef struct			s_mod

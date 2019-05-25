@@ -25,6 +25,7 @@ t_flags         *t_flags_init(t_printf *info, t_mod *mod)
     temp->minus = '0';
     temp->plus = '0';
     temp->zero = '0';
+    temp->space = '0';
     return (temp);
 }
 

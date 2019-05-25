@@ -79,10 +79,11 @@ void    signed_prec(t_mod *mod)
     i = 0;
     x = 0;
     size = ft_strlen(mod->arg_text);
-
-    if (mod->precision > size)
+    if (mod->arg_text[0] == '0' && mod->precision == 0)
+        mod->arg_text[0] = '\0';
+    if (mod->precision > size || mod->flags)
     {
-        mod->precision += ((mod->flags && mod->flags->plus == '1') || (has_sign(mod->arg_text))) ? 1 : 0;
+        mod->precision += ((mod->flags && (mod->flags->plus == '1' || (mod->flags->space == '1' && is_signed(mod->frmt_spec)))) || (has_sign(mod->arg_text))) ? 1 : 0;
         temp = (char*)ft_memalloc(sizeof(char) * (mod->precision + 1));
         if (has_sign(mod->arg_text))
         {
@@ -91,7 +92,9 @@ void    signed_prec(t_mod *mod)
         }
         else if (mod->flags && mod->flags->plus == '1')
             temp[i++] = '+';
-        while (i < mod->precision)
+        else if (mod->flags && mod->flags->space == '1' && is_signed(mod->frmt_spec))
+            temp[i++] = ' ';
+        while (i < mod->precision || mod->arg_text[x] != '\0')
         {
             if (i < (mod->precision  - size))
                 temp[i++] = '0';
@@ -126,8 +129,7 @@ void    mod_string_signed(t_printf *info, t_mod *mod)
         else
             mod->arg_text = ft_itoa((short)arg->data);
     }
-    if (mod->precision != -1)
-        signed_prec(mod);
+    signed_prec(mod);
     set_string(mod);
     (mod->res != NULL) ? add_string(info, mod->res) : catch_error("mod_string_signed error", info);
 }
