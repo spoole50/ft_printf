@@ -82,6 +82,35 @@ void    arg_to_string(t_mod* mod)
 
 }
 
+/*void    add_sign(t_mod *mod)
+{
+    int     neg;
+    int     size;
+    char    *tmp;
+    int     i;
+    int     x;
+    
+    i = 0;
+    x = 0;
+    size = ft_strlen(mod->arg_text);
+    neg = has_sign(mod->arg_text);
+    if (!ft_isnum(mod->arg_text[neg - 1]))
+        return;
+    size += (neg > 0) ? 1 : 2;
+    tmp = (char*)ft_memalloc(sizeof(char));
+    while (!ft_isnum(mod->arg_text[i + 1]))
+        tmp[x++] = mod->arg_text[i++];
+    tmp[x++] = (neg > 0) ? '-' : '+';
+    while (mod->arg_text[i] != '\0')
+    {
+        if (mod->arg_text[i] != '-')
+            tmp[x++] = mod->arg_text[i];
+        i++;
+    }
+    free(mod->arg_text);
+    mod->arg_text = tmp;
+}*/
+
 void    set_string(t_mod *mod)
 {
     int     max;
@@ -99,20 +128,22 @@ void    set_string(t_mod *mod)
                 mod->res[mod->res_i++] = ' ';
             mod->res[mod->res_i] = '\0';
         }
-        else if (mod->flags->zero == '1')
+        else if (mod->flags->zero == '1' && mod->precision == -1)
         {
             while (mod->res_i < (max - arg_len))
                 mod->res[mod->res_i++] = '0';
         }
     }
-    else
+    /*if (has_sign(mod->arg_text) > 0 || (mod->flags != NULL && mod->flags->plus == '1'))
+            add_sign(mod);*/
+    if (mod->res[0] == '\0')
     {
         while (mod->res_i < (max - arg_len))
             mod->res[mod->res_i++] = ' ';
         arg_to_string(mod);
     }
-    if (mod->precision != -1 && mod->frmt_spec != 'c')
-        free(mod->arg_text);
+    while (mod->res_i < max)
+        mod->res[mod->res_i++] = *mod->arg_text++; 
 }
 
 int     count_empty(char *str)

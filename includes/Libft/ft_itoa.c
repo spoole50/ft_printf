@@ -20,47 +20,27 @@
 
 #include "libft.h"
 
-static int		make_arr(int n, char **result)
+static int		make_arr(intmax_t n, char **result)
 {
 	int		i;
 
 	i = 0;
-	if (n == -2147483648)
-		i = 11;
-	else
+	if (n < 0)
 	{
-		if (n < 0)
-		{
-			n *= -1;
-			i += 1;
-		}
-		while ((n / 10) > 0)
-		{
-			n /= 10;
-			i += 1;
-		}
+		n *= -1;
+		i += 1;
+	}
+	while ((n / 10) > 0)
+	{
+		n /= 10;
+		i += 1;
 	}
 	i++;
 	*result = (char*)malloc(sizeof(char) * i + 1);
 	return (i);
 }
 
-static void		int_min(char *result)
-{
-	char	*min;
-	int		i;
-
-	i = 0;
-	min = "-2147483648";
-	while (min[i])
-	{
-		result[i] = min[i];
-		i++;
-	}
-	result[i] = '\0';
-}
-
-static void		work(int n, int size, char *result)
+static void		work(intmax_t n, int size, char *result)
 {
 	int		i;
 	int		neg;
@@ -83,19 +63,15 @@ static void		work(int n, int size, char *result)
 	result[size] = '\0';
 }
 
-char			*ft_itoa(int n)
+char			*ft_itoa(intmax_t n)
 {
 	int		size;
 	char	*result;
 
 	result = NULL;
-	if (n > 2147483647 || n < -2147483648)
-		return (NULL);
 	size = make_arr(n, &result);
 	if (result == NULL)
 		return (NULL);
-	if (n == -2147483648)
-		int_min(result);
 	else
 		work(n, size, result);
 	return (result);
