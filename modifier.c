@@ -219,6 +219,8 @@ void    handle_mod(t_printf *info, va_list ap)
     parse_spec(info, mod);
     if (is_text(mod->frmt_spec) || is_other(mod->frmt_spec))
         mod_string_char(info, mod);
+    else if (mod->frmt_spec == 'p')
+        mod_string_point(info, mod);
     else if (is_signed(mod->frmt_spec))
         mod_string_signed(info, mod);
     else if (is_unsigned(mod->frmt_spec))

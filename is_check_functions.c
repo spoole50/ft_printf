@@ -25,12 +25,12 @@ int     is_signed(char q)
 
 int     is_unsigned(char q)
 {
-    return (q == 'o' || q == 'u' || q == 'x' || q == 'X');
+    return (q == 'o' || q == 'u' || q == 'x' || q == 'X' || q =='p');
 }
 
 int     is_text(char q)
 {
-    return (q == 's' || q == 'c');
+    return (q == 's' || q == 'c' || q == 'S' || q == 'C');
 }
 int     is_float(char q)
 {

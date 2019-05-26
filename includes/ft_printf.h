@@ -126,6 +126,7 @@ void    mod_string_char(t_printf *info, t_mod *mod);
 void    mod_string_signed(t_printf *info, t_mod *mod);
 void    mod_string_unsigned(t_printf *info, t_mod *mod);
 void    mod_string_float(t_printf *info, t_mod *mod);
+void    mod_string_point(t_printf *info, t_mod *mod);
 
 /*
 ** Modification Checks

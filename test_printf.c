@@ -35,9 +35,16 @@ int		main(void)
 	//printf("%05x\n", 42);
 	//ft_printf("%+++d\n", 534);
 	//printf("%+++d\n", 534);
-	ft_printf("%05.1u %3.4hu %-4.7u\n", 45, (unsigned short)-1789, 147);
-	printf("%05.1u %3.4hu %-4.7u\n", 45, (unsigned short)-1789, 147);
+	//ft_printf("%05.1u %3.4hu %-4.7u\n", 45, (unsigned short)-1789, 147);
+	//printf("%05.1u %3.4hu %-4.7u\n", 45, (unsigned short)-1789, 147);
 	//ft_printf("%.0i\n", 10);
 	//printf("%.0i\n", 10);
+	//char test[] = "This is a test";
+	//printf("%p\n", &test);
+	//ft_printf("%p\n", &test);
+	//ft_printf("%05.1u %3.4hu %-4.7u, 45\n", (unsigned short)-1789, 147);
+	//printf("%05.1u %3.4hu %-4.7u, 45\n", (unsigned short)-1789, 147);
+	ft_printf("%#o\n", 1000);
+	printf("%#o\n", 1000);
 	return (0);
 }

@@ -27,32 +27,31 @@ void    string_precision(t_mod *mod)
     mod->arg_text = new;
 }
 
+t_arg_node      *find_arg(t_arg_node *begin, int arg_num)
+{
+    while (begin->index != arg_num)
+        begin = begin->next;
+    return (begin);
+}
+
 void    mod_string_char(t_printf *info, t_mod *mod)
 {
     char        *temp;
     t_arg_node  *arg;
 
     temp = NULL;
-    arg = info->arg_begin;
-    while (arg->index != mod->arg_num)
-        arg = arg->next;
-    if (mod->frmt_spec == 'c')
+    if (mod->frmt_spec != '%')
+        arg = find_arg(info->arg_begin, mod->arg_num);
+    if (mod->frmt_spec == 'c' || mod->frmt_spec == 'C')
         mod->arg_text = (char*)&arg->data;
     else if (arg->data == NULL)
         mod->arg_text = "(null)";
-    else
+    else if (mod->frmt_spec != '%')
         mod->arg_text = (char*)arg->data;
     if (mod->precision != -1 && mod->frmt_spec != 'c')
         string_precision(mod);
     set_string(mod);
     add_string(info, mod->res);
-}
-
-t_arg_node      *find_arg(t_arg_node *begin, int arg_num)
-{
-    while (begin->index != arg_num)
-        begin = begin->next;
-    return (begin);
 }
 
 int     has_sign(char *s1)
@@ -183,7 +182,7 @@ void    add_x(t_mod *mod)
     size = ft_strlen(mod->arg_text) + 3;
     tmp = (char*)ft_memalloc(sizeof(char) * size);
     tmp[i++] = '0';
-    tmp[i++] = (mod->frmt_spec == 'x') ? 'x' : 'X';
+    tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
     while (i < size)
         tmp[i++] = mod->arg_text[x++];
     free(mod->arg_text);
@@ -204,10 +203,23 @@ void    mod_string_unsigned(t_printf *info, t_mod *mod)
     if (mod->frmt_spec == 'x')
         lower(mod->arg_text);
     if (mod->frmt_spec == 'o' && mod->flags && mod->flags->hash == '1' && mod->arg_text[0] != '0')
-        mod->precision = 1;
+        mod->precision = 1 + ft_strlen(mod->arg_text);
     signed_prec(mod);
     if (mod->flags && mod->flags->hash == '1' && (mod->frmt_spec == 'x' || mod->frmt_spec == 'X') && mod->arg_text[0] != '0')
         add_x(mod);
+    set_string(mod);
+    add_string(info, mod->res);
+}
+
+void    mod_string_point(t_printf *info, t_mod *mod)
+{
+    t_arg_node *arg;
+
+    arg = find_arg(info->arg_begin, mod->arg_num);
+    mod->len_mod[0] = 'l';
+    mod->arg_text = unsigned_len_mod(arg, mod, 16);
+    lower(mod->arg_text);
+    add_x(mod);
     set_string(mod);
     add_string(info, mod->res);
 }
