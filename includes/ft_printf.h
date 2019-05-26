@@ -23,10 +23,10 @@
 
 typedef struct          s_flags
 {
-    char                hash;
-    char                zero;
-    char                plus;
-    char                minus;
+	char                hash;
+	char                zero;
+	char                plus;
+	char                minus;
 	char				space;
 }                       t_flags;
 
@@ -55,7 +55,7 @@ typedef struct  		s_printf
 {
 	int					tot_writes;
 	int					in;
-    int                 cur_args;
+	int                 cur_args;
 	int					max_args;
 	char				*input;
 	char				*result;
@@ -101,22 +101,26 @@ t_printf        *t_printf_init(char *in);
 int         handle_mult_arg(t_printf *info, va_list ap);
 int         add_next_arg(t_printf *info, va_list ap);
 void        arg_node_init(t_printf *info, void *indata);
+t_arg_node      *find_arg(t_arg_node *begin, int arg_num);
 
 /*
 ** Various check functions
-** is_check_functions.c
+** is_checks.c
 */
 int     is_space(char q);
 int     is_signed(char q);
 int     is_unsigned(char q);
 int     is_text(char q);
 int     is_float(char q);
+/*
+** is_checks2.c
+*/
 int     is_other(char q);
 int     is_conv(char q);
 int     is_flag(char q);
 int     is_len_mod(char *str, int i);
 int	    is_invalid_conv_spec(char *str, int i);
-int     check_arg(char *str, int i);
+
 
 /*
 ** Create Modification String
@@ -129,11 +133,40 @@ void    mod_string_float(t_printf *info, t_mod *mod);
 void    mod_string_point(t_printf *info, t_mod *mod);
 
 /*
+** Mod Assists
+** mod_assist.c
+*/
+int    read_number(t_printf *info);
+void    handle_flags(t_printf *info, t_mod *mod);
+void    handle_precision(t_printf *info, t_mod *mod);
+char    *handle_num(t_printf *info);
+void    arg_to_string(t_mod* mod);
+
+/*
+** Handle Width & Precsion
+** width_prec.c
+*/
+void    set_string(t_mod *mod);
+int     count_empty(char *str);
+void    string_precision(t_mod *mod);
+void    signed_prec(t_mod *mod);
+
+/*
+** Num Task Functions
+** num_tasks.c
+*/
+int     has_sign(char *s1);
+void    lower(char *str);
+void    add_x(t_mod *mod);
+char    *unsigned_len_mod(t_arg_node *arg, t_mod *mod, int base);
+
+/*
 ** Modification Checks
 ** modifiers.c
 */
 int    			read_number(t_printf *info);
 void    		handle_mod(t_printf *info, va_list ap);
 void    		set_string(t_mod *mod);
+int				check_arg(char *str, int i);
 
 #endif

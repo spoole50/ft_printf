@@ -6,7 +6,7 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 12:45:36 by spoole            #+#    #+#             */
-/*   Updated: 2019/04/01 12:45:41 by spoole           ###   ########.fr       */
+/*   Updated: 2019/05/25 23:15:17 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,19 @@
 
 int			ft_printf(const char *input, ...)
 {
-	va_list ap;
+	va_list	ap;
 	char	*output;
 	int		result;
-	int 	i;
+	int		i;
 
-	result = i = 0;
+	result = 0;
+	i = 0;
 	output = NULL;
 	va_start(ap, input);
 	result = ft_vasprintf(&output, input, ap);
 	va_end(ap);
 	while (i < result)
 		ft_putchar(output[i++]);
-	//ft_putstr(output);
 	free(output);
 	return (result);
 }

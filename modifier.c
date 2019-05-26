@@ -6,226 +6,88 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/01 21:21:30 by spoole            #+#    #+#             */
-/*   Updated: 2019/05/01 21:21:31 by spoole           ###   ########.fr       */
+/*   Updated: 2019/05/26 00:00:34 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 
-int    read_number(t_printf *info)
+int			check_arg(char *str, int i)
 {
-    char *temp;
-    int i;
-
-    i = 0;
-    temp = (char*)ft_memalloc(10);
-    while (ft_isnum(INPUT[INDEX]) || is_space(INPUT[INDEX]))
-    {
-        if (ft_isnum(INPUT[INDEX]))
-            temp[i++] = INPUT[INDEX];
-        INDEX++;
-    }
-    i = ft_atoi(temp);
-    free(temp);
-    return (i);
+	if (ft_isnum(str[i]) || is_space(str[i]))
+	{
+		while (ft_isnum(str[i]) || is_space(str[i]))
+			i++;
+		if (str[i] == '$')
+			return (1);
+	}
+	return (0);
 }
 
-void    handle_flags(t_printf *info, t_mod *mod)
+void		handle_len_mod(t_printf *info, t_mod *mod)
 {
-    t_flags *temp;
-    temp = t_flags_init(info, mod);
-    while (is_flag(INPUT[INDEX]) || is_space(INPUT[INDEX]))
-    {
-        if (INPUT[INDEX] == '#')
-            temp->hash = '1';
-        if (INPUT[INDEX] == '-')
-            temp->minus = '1';
-        if (INPUT[INDEX] == '+')
-            temp->plus = '1';
-        if (INPUT[INDEX] == '0')
-            temp->zero = '1';
-        if (is_space(INPUT[INDEX]))
-            temp->space = 1;
-        INDEX++;
-    }
-    mod->flags = temp;
+	int		i;
+
+	i = 0;
+	while (!(is_conv(INPUT[INDEX])))
+		mod->len_mod[i++] = INPUT[INDEX++];
 }
 
-void    handle_precision(t_printf *info, t_mod *mod)
+void		validate_conv_spec(t_printf *info, t_mod *mod)
 {
-    INDEX++;
-    while (is_space(INPUT[INDEX]))
-        INDEX++;
-    if (ft_isnum(INPUT[INDEX]))
-        mod->precision = read_number(info);
-    else
-        mod->precision = 0;
+	int	len;
+	int	i;
+
+	i = 0;
+	INDEX++;
+	if ((len = is_invalid_conv_spec(INPUT, INDEX)) == -1)
+		catch_error("Invalid Conversion Specification", info);
+	mod->frmt_spec = INPUT[INDEX + len];
 }
 
-char    *handle_num(t_printf *info)
+void		parse_spec(t_printf *info, t_mod *mod)
 {
-    int i;
-    char *res;
-    
-    res = NULL;
-    i = info->in;
-    return (res);
+	while (INDEX[INPUT] != mod->frmt_spec)
+	{
+		if (is_flag(INPUT[INDEX]))
+			handle_flags(info, mod);
+		else if (ft_isnum(INPUT[INDEX]))
+			mod->min_wid = read_number(info);
+		else if (INPUT[INDEX] == '.')
+			handle_precision(info, mod);
+		else if (is_len_mod(INPUT, INDEX))
+			handle_len_mod(info, mod);
+		else
+			INDEX++;
+	}
+	INDEX++;
 }
 
-void    arg_to_string(t_mod* mod)
+void		handle_mod(t_printf *info, va_list ap)
 {
-    int i;
+	t_mod	*mod;
 
-    i = 0;
-    while (mod->arg_text[i] != '\0')
-            mod->res[mod->res_i++] = mod->arg_text[i++];
-    if (*(mod->arg_text) == '\0' && i == 0 && mod->frmt_spec == 'c')
-        mod->res[mod->res_i++] = (char)0;
-
-}
-
-/*void    add_sign(t_mod *mod)
-{
-    int     neg;
-    int     size;
-    char    *tmp;
-    int     i;
-    int     x;
-    
-    i = 0;
-    x = 0;
-    size = ft_strlen(mod->arg_text);
-    neg = has_sign(mod->arg_text);
-    if (!ft_isnum(mod->arg_text[neg - 1]))
-        return;
-    size += (neg > 0) ? 1 : 2;
-    tmp = (char*)ft_memalloc(sizeof(char));
-    while (!ft_isnum(mod->arg_text[i + 1]))
-        tmp[x++] = mod->arg_text[i++];
-    tmp[x++] = (neg > 0) ? '-' : '+';
-    while (mod->arg_text[i] != '\0')
-    {
-        if (mod->arg_text[i] != '-')
-            tmp[x++] = mod->arg_text[i];
-        i++;
-    }
-    free(mod->arg_text);
-    mod->arg_text = tmp;
-}*/
-
-void    set_string(t_mod *mod)
-{
-    int     max;
-    int     arg_len;
-    
-    arg_len = ft_strlen(mod->arg_text);
-    max = (arg_len < mod->min_wid) ? mod->min_wid : arg_len;
-    mod->res = ft_memalloc(max + 1);
-    if (mod->flags != NULL)
-    {
-        if (mod->flags->minus == '1')
-        {
-            arg_to_string(mod);
-            while(mod->res_i < max)
-                mod->res[mod->res_i++] = ' ';
-            mod->res[mod->res_i] = '\0';
-        }
-        else if (mod->flags->zero == '1' && mod->precision == -1)
-        {
-            while (mod->res_i < (max - arg_len))
-                mod->res[mod->res_i++] = '0';
-        }
-    }
-    /*if (has_sign(mod->arg_text) > 0 || (mod->flags != NULL && mod->flags->plus == '1'))
-            add_sign(mod);*/
-    if (mod->res[0] == '\0')
-    {
-        while (mod->res_i < (max - arg_len))
-            mod->res[mod->res_i++] = ' ';
-        arg_to_string(mod);
-    }
-    while (mod->res_i < max)
-        mod->res[mod->res_i++] = *mod->arg_text++; 
-}
-
-int     count_empty(char *str)
-{
-    int i;
-
-    i = 0;
-    while (*str != '\0')
-    {
-        if (!is_space(*str))
-            i++;
-        str++;
-    }
-    return (i);
-}
-
-void    handle_len_mod(t_printf *info, t_mod *mod)
-{
-    int i;
-
-    i = 0;
-    while (!(is_conv(INPUT[INDEX])))
-        mod->len_mod[i++] = INPUT[INDEX++];
-}
-
-void    validate_conv_spec(t_printf *info, t_mod *mod)
-{
-    int len;
-    int i;
-
-    i = 0;
-    if ((len = is_invalid_conv_spec(INPUT, INDEX)) == -1)
-        catch_error("Invalid Conversion Specification", info);
-    mod->frmt_spec = INPUT[INDEX + len];
-}
-
-void    parse_spec(t_printf *info, t_mod *mod)
-{
-    while (INDEX[INPUT] != mod->frmt_spec)
-    {
-        if (is_flag(INPUT[INDEX]))
-            handle_flags(info, mod);
-        else if (ft_isnum(INPUT[INDEX]))
-            mod->min_wid = read_number(info);
-        else if(INPUT[INDEX] == '.')
-            handle_precision(info, mod);
-        else if (is_len_mod(INPUT, INDEX))
-            handle_len_mod(info, mod);
-        else
-            INDEX++;
-    }
-    INDEX++;
-}
-
-void    handle_mod(t_printf *info, va_list ap)
-{
-    t_mod *mod;
-
-    mod = t_mod_init(info);
-    INDEX++;
-    validate_conv_spec(info, mod);
-    if (is_other(mod->frmt_spec))
-        mod->arg_text = "%";
-    else
-    {
-        if (check_arg(INPUT, INDEX))
-            mod->arg_num = handle_mult_arg(info, ap);
-        else
-            mod->arg_num = add_next_arg(info, ap);
-    }
-    parse_spec(info, mod);
-    if (is_text(mod->frmt_spec) || is_other(mod->frmt_spec))
-        mod_string_char(info, mod);
-    else if (mod->frmt_spec == 'p')
-        mod_string_point(info, mod);
-    else if (is_signed(mod->frmt_spec))
-        mod_string_signed(info, mod);
-    else if (is_unsigned(mod->frmt_spec))
-        mod_string_unsigned(info, mod);
-    else if (is_float(mod->frmt_spec))
-        mod_string_float(info, mod);
-    free(mod);
+	mod = t_mod_init(info);
+	validate_conv_spec(info, mod);
+	if (is_other(mod->frmt_spec))
+		mod->arg_text = "%";
+	else
+	{
+		if (check_arg(INPUT, INDEX))
+			mod->arg_num = handle_mult_arg(info, ap);
+		else
+			mod->arg_num = add_next_arg(info, ap);
+	}
+	parse_spec(info, mod);
+	if (is_text(mod->frmt_spec) || is_other(mod->frmt_spec))
+		mod_string_char(info, mod);
+	else if (mod->frmt_spec == 'p')
+		mod_string_point(info, mod);
+	else if (is_signed(mod->frmt_spec))
+		mod_string_signed(info, mod);
+	else if (is_unsigned(mod->frmt_spec))
+		mod_string_unsigned(info, mod);
+	else if (is_float(mod->frmt_spec))
+		mod_string_float(info, mod);
+	free(mod);
 }

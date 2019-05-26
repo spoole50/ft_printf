@@ -6,50 +6,57 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 14:50:12 by spoole            #+#    #+#             */
-/*   Updated: 2019/05/08 14:50:26 by spoole           ###   ########.fr       */
+/*   Updated: 2019/05/25 23:13:50 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 
-int         handle_mult_arg(t_printf *info, va_list ap)
+t_arg_node		*find_arg(t_arg_node *begin, int arg_num)
 {
-    int i;
-
-    i = read_number(info);
-    if (i > info->max_args)
-        info->max_args = i;
-    while (info->cur_args < info->max_args)
-        add_next_arg(info, ap);
-    while (INPUT[INDEX] != '$')
-        INDEX++;
-    INDEX++;
-    return (i);
+	while (begin->index != arg_num)
+		begin = begin->next;
+	return (begin);
 }
 
-int         add_next_arg(t_printf *info, va_list ap)
+int				handle_mult_arg(t_printf *info, va_list ap)
 {
-    arg_node_init(info, (void*)va_arg(ap, void*));
-    return (++info->cur_args);
+	int			i;
+
+	i = read_number(info);
+	if (i > info->max_args)
+		info->max_args = i;
+	while (info->cur_args < info->max_args)
+		add_next_arg(info, ap);
+	while (INPUT[INDEX] != '$')
+		INDEX++;
+	INDEX++;
+	return (i);
 }
 
-void        arg_node_init(t_printf *info, void *indata)
+int				add_next_arg(t_printf *info, va_list ap)
 {
-    t_arg_node  *temp;
-    t_arg_node  *iter;
+	arg_node_init(info, (void*)va_arg(ap, void*));
+	return (++info->cur_args);
+}
 
-    if ((temp = (t_arg_node*)malloc(sizeof(t_arg_node))) == NULL)
-        catch_error("t_arg_node initialization error", info);
-    temp->index = info->cur_args + 1;
-    temp->data = indata;
-    temp->next = NULL;
-    if (info->arg_begin == NULL)
-        info->arg_begin = temp;
-    else
-    {
-        iter = info->arg_begin;
-        while (iter->next != NULL)
-            iter = iter->next;
-        iter->next = temp;
-    }
+void			arg_node_init(t_printf *info, void *indata)
+{
+	t_arg_node	*temp;
+	t_arg_node	*iter;
+
+	if ((temp = (t_arg_node*)malloc(sizeof(t_arg_node))) == NULL)
+		catch_error("t_arg_node initialization error", info);
+	temp->index = info->cur_args + 1;
+	temp->data = indata;
+	temp->next = NULL;
+	if (info->arg_begin == NULL)
+		info->arg_begin = temp;
+	else
+	{
+		iter = info->arg_begin;
+		while (iter->next != NULL)
+			iter = iter->next;
+		iter->next = temp;
+	}
 }

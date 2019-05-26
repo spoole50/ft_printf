@@ -6,21 +6,20 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 15:19:52 by spoole            #+#    #+#             */
-/*   Updated: 2019/04/01 15:19:54 by spoole           ###   ########.fr       */
+/*   Updated: 2019/05/25 23:17:04 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
 
-
-void    catch_error(char *s1, t_printf *clean)
+void			catch_error(char *s1, t_printf *clean)
 {
-    clean_tprintf(clean);
-    ft_putstr(s1);
-    exit(EXIT_FAILURE);
+	clean_tprintf(clean);
+	ft_putstr(s1);
+	exit(EXIT_FAILURE);
 }
 
-int		ft_vasprintf(char **str, const char *input, va_list ap)
+int				ft_vasprintf(char **str, const char *input, va_list ap)
 {
 	t_printf	*info;
 	int			count;
@@ -35,10 +34,9 @@ int		ft_vasprintf(char **str, const char *input, va_list ap)
 		if (count > 0)
 			add_text(info, count);
 		else
-			handle_mod(info, ap);		
+			handle_mod(info, ap);
 	}
 	*str = info->result;
-	//count = ft_strlen(info->result);
 	count = info->tot_writes;
 	clean_tprintf(info);
 	return (count);
