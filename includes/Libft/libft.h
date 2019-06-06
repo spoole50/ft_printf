@@ -23,7 +23,7 @@ int						ft_atoi(const char *str);
 char					*ft_itoa(intmax_t n);
 char    				*ft_itoab_unsigned(uintmax_t num, int base);
 char    				*ft_itoab_signed(intmax_t num, int base);
-char    				*ft_ftoa(long double num, int precision);
+char    				*ft_ftoa(double num, int precision);
 /*
 **	String Manipulation & Characterization
 */

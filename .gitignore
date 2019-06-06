@@ -4,4 +4,5 @@
 #Exclude vscode
 /.vscode 
 
+.nfs*
 curqui_test

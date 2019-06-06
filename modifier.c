@@ -74,9 +74,9 @@ void		handle_mod(t_printf *info, va_list ap)
 	else
 	{
 		if (check_arg(INPUT, INDEX))
-			mod->arg_num = handle_mult_arg(info, ap);
+			mod->arg_num = handle_mult_arg(info, ap, mod->frmt_spec);
 		else
-			mod->arg_num = add_next_arg(info, ap);
+			mod->arg_num = add_next_arg(info, ap, mod->frmt_spec);
 	}
 	parse_spec(info, mod);
 	if (is_text(mod->frmt_spec) || is_other(mod->frmt_spec))

@@ -21,11 +21,11 @@ void			mod_string_char(t_printf *info, t_mod *mod)
 	if (mod->frmt_spec != '%')
 		arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->frmt_spec == 'c' || mod->frmt_spec == 'C')
-		mod->arg_text = (char*)&arg->data;
-	else if (arg->data == NULL)
+		mod->arg_text = (char*)&arg->data.vdata;
+	else if (arg->data.vdata == NULL)
 		mod->arg_text = "(null)";
 	else if (mod->frmt_spec != '%')
-		mod->arg_text = (char*)arg->data;
+		mod->arg_text = (char*)arg->data.vdata;
 	if (mod->precision != -1 && mod->frmt_spec != 'c')
 		string_precision(mod);
 	set_string(mod);
@@ -38,20 +38,20 @@ void			mod_string_signed(t_printf *info, t_mod *mod)
 
 	arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->len_mod[0] == '0')
-		mod->arg_text = ft_itoa((int)arg->data);
+		mod->arg_text = ft_itoa((int)arg->data.vdata);
 	if (mod->len_mod[0] == 'l')
 	{
 		if (mod->len_mod[1] == 'l')
-			mod->arg_text = ft_itoa((long long)arg->data);
+			mod->arg_text = ft_itoa((long long)arg->data.vdata);
 		else
-			mod->arg_text = ft_itoa((long)arg->data);
+			mod->arg_text = ft_itoa((long)arg->data.vdata);
 	}
 	else if (mod->len_mod[0] == 'h')
 	{
 		if (mod->len_mod[1] == 'h')
-			mod->arg_text = ft_itoa((signed char)arg->data);
+			mod->arg_text = ft_itoa((signed char)arg->data.vdata);
 		else
-			mod->arg_text = ft_itoa((short)arg->data);
+			mod->arg_text = ft_itoa((short)arg->data.vdata);
 	}
 	signed_prec(mod);
 	set_string(mod);
@@ -96,16 +96,35 @@ void			mod_string_point(t_printf *info, t_mod *mod)
 	add_string(info, mod->res);
 }
 
+void			add_plus(t_mod *mod)
+{
+	char	*temp;
+	int		size;
+	int		i;
+	int		x;
+
+	i = 0;
+	x = 0;
+	size = ft_strlen(mod->arg_text);
+	size++;
+	temp = (char*)ft_memalloc(size + 1);
+	temp[i++] = '+';
+	while (mod->arg_text[x] != '\0')
+		temp[i++] = mod->arg_text[x++];
+	free(mod->arg_text);
+	mod->arg_text = temp;
+}
+
 void			mod_string_float(t_printf *info, t_mod *mod)
 {
 	t_arg_node	*arg;
-	char		*temp;
-	long double	*p;
 
-	temp = NULL;
 	arg = find_arg(info->arg_begin, mod->arg_num);
-	p = (long double*)arg->data;
-	temp = ft_ftoa(*p, mod->precision);
-	add_string(info, temp);
-	free(temp);
+	if (mod->precision == -1)
+		mod->precision = 6;
+	mod->arg_text = ft_ftoa(arg->data.flt, mod->precision);
+	if (mod->flags->plus == '1')
+		add_plus(mod);
+	set_string(mod);
+	add_string(info, mod->res);
 }

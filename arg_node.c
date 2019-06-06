@@ -19,7 +19,7 @@ t_arg_node		*find_arg(t_arg_node *begin, int arg_num)
 	return (begin);
 }
 
-int				handle_mult_arg(t_printf *info, va_list ap)
+int				handle_mult_arg(t_printf *info, va_list ap, char fs)
 {
 	int			i;
 
@@ -27,20 +27,26 @@ int				handle_mult_arg(t_printf *info, va_list ap)
 	if (i > info->max_args)
 		info->max_args = i;
 	while (info->cur_args < info->max_args)
-		add_next_arg(info, ap);
+		add_next_arg(info, ap, fs);
 	while (INPUT[INDEX] != '$')
 		INDEX++;
 	INDEX++;
 	return (i);
 }
 
-int				add_next_arg(t_printf *info, va_list ap)
+int				add_next_arg(t_printf *info, va_list ap, char fs)
 {
-	arg_node_init(info, (void*)va_arg(ap, void*));
+	t_arg_node	*temp;
+
+	temp = arg_node_init(info);
+	if (is_float(fs))
+		temp->data.flt = (double)va_arg(ap, double);
+	else
+		temp->data.vdata = (void*)va_arg(ap, void*);
 	return (++info->cur_args);
 }
 
-void			arg_node_init(t_printf *info, void *indata)
+t_arg_node			*arg_node_init(t_printf *info)
 {
 	t_arg_node	*temp;
 	t_arg_node	*iter;
@@ -48,7 +54,6 @@ void			arg_node_init(t_printf *info, void *indata)
 	if ((temp = (t_arg_node*)malloc(sizeof(t_arg_node))) == NULL)
 		catch_error("t_arg_node initialization error", info);
 	temp->index = info->cur_args + 1;
-	temp->data = indata;
 	temp->next = NULL;
 	if (info->arg_begin == NULL)
 		info->arg_begin = temp;
@@ -59,4 +64,5 @@ void			arg_node_init(t_printf *info, void *indata)
 			iter = iter->next;
 		iter->next = temp;
 	}
+	return (temp);
 }

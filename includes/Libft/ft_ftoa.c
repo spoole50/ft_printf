@@ -12,10 +12,11 @@
 
 #include "libft.h"
 
-char    *ft_ftoa(long double num, int precision)
+char    *ft_ftoa(double num, int precision)
 {
     char        *res;
     char        *temp;
+    char        *clean;
     uintmax_t   tmp;
     int         neg;
     int         size;
@@ -35,6 +36,7 @@ char    *ft_ftoa(long double num, int precision)
     else
         tmp = num;
     temp = ft_itoab_unsigned(num, 10);
+    clean = temp;
     size = ft_strlen(temp);
     size += (neg == 1) ? 3 : 2;
     res = (char*)ft_memalloc(sizeof(char) * (size));
@@ -47,6 +49,6 @@ char    *ft_ftoa(long double num, int precision)
         else
             res[i++] = *temp++; 
     }
-    free(temp);
+    free(clean);
     return (res);
 }

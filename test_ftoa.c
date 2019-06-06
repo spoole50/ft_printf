@@ -6,5 +6,6 @@ int     main(void)
 {
     float temp = 123.456;
     char *test = ft_ftoa(temp, 6);
+    test = ft_ftoa(temp, 5);
     return (0);
 }

@@ -21,6 +21,12 @@
 # define INPUT info->input
 # define INDEX info->in
 
+typedef union			u_data
+{
+	void	*vdata;
+	double 	flt;
+}						t_data;
+
 typedef struct          s_flags
 {
 	char                hash;
@@ -47,7 +53,7 @@ typedef struct			s_mod
 typedef	struct 			s_arg_node
 {
 	int					index;
-	void 				*data;
+	t_data				data;
 	struct s_arg_node	*next;
 }						t_arg_node;
 
@@ -98,9 +104,9 @@ t_printf        *t_printf_init(char *in);
 ** Argument Node Functions
 ** arg_node.c
 */
-int         handle_mult_arg(t_printf *info, va_list ap);
-int         add_next_arg(t_printf *info, va_list ap);
-void        arg_node_init(t_printf *info, void *indata);
+int         handle_mult_arg(t_printf *info, va_list ap, char fs);
+int         add_next_arg(t_printf *info, va_list ap, char fs);
+t_arg_node        *arg_node_init(t_printf *info);
 t_arg_node      *find_arg(t_arg_node *begin, int arg_num);
 
 /*

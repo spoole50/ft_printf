@@ -30,7 +30,8 @@ void		add_string(t_printf *info, char *s1)
 	info->tot_writes += ft_strlen(s1);
 	info->result = ft_strjoin(info->result, s1);
 	free(s1);
-	free(clean);
+	if (clean != NULL)
+		free(clean);
 }
 
 void		add_text(t_printf *info, int len)

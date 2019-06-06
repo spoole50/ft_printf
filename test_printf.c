@@ -15,6 +15,8 @@
 
 int		main(void)
 {
+	int s1, s2;
+	s1 = s2 = 0;
 	//ft_printf("%010.6d\n", 1234);
 	//printf("%10.6d\n", 1234);
 	//ft_printf("%+ld\n", 2147483648);
@@ -44,7 +46,10 @@ int		main(void)
 	//ft_printf("%p\n", &test);
 	//ft_printf("%05.1u %3.4hu %-4.7u, 45\n", (unsigned short)-1789, 147);
 	//printf("%05.1u %3.4hu %-4.7u, 45\n", (unsigned short)-1789, 147);
-	ft_printf("%#o\n", 1000);
-	printf("%#o\n", 1000);
+	//ft_printf("%#o\n", 1000);
+	//printf("%#o\n", 1000);
+	s1 = printf("%-+10.5f\n", 1.0);
+	s2 = ft_printf("%-+10.5f\n", 1.0);
+	printf("sysSize:%d ftSize:%d\n", s1, s2);
 	return (0);
 }

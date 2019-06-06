@@ -66,18 +66,18 @@ char		*unsigned_len_mod(t_arg_node *arg, t_mod *mod, int base)
 	if (mod->len_mod[0] == 'l')
 	{
 		if (mod->len_mod[1] == 'l')
-			temp = ft_itoab_unsigned((unsigned long long)arg->data, base);
+			temp = ft_itoab_unsigned((unsigned long long)arg->data.vdata, base);
 		else
-			temp = ft_itoab_unsigned((unsigned long)arg->data, base);
+			temp = ft_itoab_unsigned((unsigned long)arg->data.vdata, base);
 	}
 	else if (mod->len_mod[0] == 'h')
 	{
 		if (mod->len_mod[1] == 'h')
-			temp = ft_itoab_unsigned((unsigned char)arg->data, base);
+			temp = ft_itoab_unsigned((unsigned char)arg->data.vdata, base);
 		else
-			temp = ft_itoab_unsigned((unsigned short)arg->data, base);
+			temp = ft_itoab_unsigned((unsigned short)arg->data.vdata, base);
 	}
 	else
-		temp = ft_itoab_unsigned((unsigned int)arg->data, base);
+		temp = ft_itoab_unsigned((unsigned int)arg->data.vdata, base);
 	return (temp);
 }
