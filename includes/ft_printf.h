@@ -97,6 +97,7 @@ void	add_text(t_printf *info, int len);
 */
 t_flags         *t_flags_init(t_printf *info, t_mod *mod);
 t_mod           *t_mod_init(t_printf *info);
+void			clean_tmod(t_mod *mod);
 void            clean_tprintf(t_printf *info);
 t_printf        *t_printf_init(char *in);
 

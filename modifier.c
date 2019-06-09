@@ -89,5 +89,5 @@ void		handle_mod(t_printf *info, va_list ap)
 		mod_string_unsigned(info, mod);
 	else if (is_float(mod->frmt_spec))
 		mod_string_float(info, mod);
-	free(mod);
+	clean_tmod(mod);
 }

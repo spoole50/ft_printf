@@ -51,10 +51,11 @@ char			*ft_itoab_unsigned(uintmax_t num, int base)
 	temp = num;
 	while (temp /= base)
 		size++;
-	res = (char*)ft_memalloc(++size);
+	res = (char*)calloc(1,sizeof(char) * (size + 1));
+	res[size--] = '\0';
 	while (size > 0)
 	{
-		res[--size] = tab[num % base];
+		res[size--] = tab[num % base];
 		num /= base;
 	}
 	return (res);

@@ -14,15 +14,14 @@
 
 void			mod_string_char(t_printf *info, t_mod *mod)
 {
-	char		*temp;
 	t_arg_node	*arg;
 
-	temp = NULL;
+	arg = NULL;
 	if (mod->frmt_spec != '%')
 		arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->frmt_spec == 'c' || mod->frmt_spec == 'C')
 		mod->arg_text = (char*)&arg->data.vdata;
-	else if (arg->data.vdata == NULL)
+	else if (arg != NULL && arg->data.vdata == NULL)
 		mod->arg_text = "(null)";
 	else if (mod->frmt_spec != '%')
 		mod->arg_text = (char*)arg->data.vdata;
@@ -39,7 +38,7 @@ void			mod_string_signed(t_printf *info, t_mod *mod)
 	arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->len_mod[0] == '0')
 		mod->arg_text = ft_itoa((int)arg->data.vdata);
-	if (mod->len_mod[0] == 'l')
+	else if (mod->len_mod[0] == 'l')
 	{
 		if (mod->len_mod[1] == 'l')
 			mod->arg_text = ft_itoa((long long)arg->data.vdata);
@@ -53,10 +52,13 @@ void			mod_string_signed(t_printf *info, t_mod *mod)
 		else
 			mod->arg_text = ft_itoa((short)arg->data.vdata);
 	}
+	else
+		catch_error("mod_string_signed error", info);
 	signed_prec(mod);
 	set_string(mod);
 	(mod->res != NULL) ? add_string(info, mod->res) :\
-		catch_error("mod_string_signed error", info);
+	catch_error("mod_string_signed width_prec error", info);
+		
 }
 
 void			mod_string_unsigned(t_printf *info, t_mod *mod)

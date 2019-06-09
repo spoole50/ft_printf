@@ -43,10 +43,17 @@ t_mod			*t_mod_init(t_printf *info)
 	temp->frmt_spec = ' ';
 	temp->flags = NULL;
 	temp->res = NULL;
-	temp->arg_text = 0;
+	temp->arg_text = NULL;
 	temp->len_mod[0] = '0';
 	temp->len_mod[1] = '0';
 	return (temp);
+}
+
+void			clean_tmod(t_mod *mod)
+{
+	if (mod->flags != NULL)
+		free(mod->flags);
+	free(mod);
 }
 
 void			clean_tprintf(t_printf *info)

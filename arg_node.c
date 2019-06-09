@@ -6,7 +6,7 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 14:50:12 by spoole            #+#    #+#             */
-/*   Updated: 2019/05/25 23:13:50 by spoole           ###   ########.fr       */
+/*   Updated: 2019/06/06 15:26:01 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int				add_next_arg(t_printf *info, va_list ap, char fs)
 	return (++info->cur_args);
 }
 
-t_arg_node			*arg_node_init(t_printf *info)
+t_arg_node		*arg_node_init(t_printf *info)
 {
 	t_arg_node	*temp;
 	t_arg_node	*iter;
@@ -55,6 +55,7 @@ t_arg_node			*arg_node_init(t_printf *info)
 		catch_error("t_arg_node initialization error", info);
 	temp->index = info->cur_args + 1;
 	temp->next = NULL;
+	temp->data.vdata = NULL;
 	if (info->arg_begin == NULL)
 		info->arg_begin = temp;
 	else
