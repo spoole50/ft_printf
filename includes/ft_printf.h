@@ -43,6 +43,7 @@ typedef struct			s_mod
 	int					precision;
 	int					cur_size;
 	int					res_i;
+	char				sign;
 	char				frmt_spec;
 	char				len_mod[2];
 	char				*arg_text;
@@ -127,6 +128,7 @@ int     is_conv(char q);
 int     is_flag(char q);
 int     is_len_mod(char *str, int i);
 int	    is_invalid_conv_spec(char *str, int i);
+int		is_empty(char q);
 
 
 /*

@@ -48,14 +48,23 @@ void		add_x(t_mod *mod)
 
 	i = 0;
 	x = 0;
-	size = ft_strlen(mod->arg_text) + 3;
+	if ((mod->res[0] == '0' && mod->res[1] == '\0') || mod->precision == 0)
+		return;
+	size = ft_strlen(mod->res);
+	size += (mod->min_wid == 0) ? 3 : 1;
 	tmp = (char*)ft_memalloc(sizeof(char) * size);
+	if (mod->min_wid != 0 && !ft_isalnum(mod->res[0]))
+	{
+		while (!ft_isalnum(mod->res[x + 2]))
+			tmp[i++] = mod->res[x++];
+	}
+	x += (mod->min_wid != 0 && is_empty(mod->res[i])) ? 2 : 0;
 	tmp[i++] = '0';
 	tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
 	while (i < size)
-		tmp[i++] = mod->arg_text[x++];
-	free(mod->arg_text);
-	mod->arg_text = tmp;
+		tmp[i++] = mod->res[x++];
+	free(mod->res);
+	mod->res = tmp;
 }
 
 char		*unsigned_len_mod(t_arg_node *arg, t_mod *mod, int base)

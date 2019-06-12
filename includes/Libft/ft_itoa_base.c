@@ -46,14 +46,14 @@ char			*ft_itoab_unsigned(uintmax_t num, int base)
 	int			size;
 	uintmax_t	temp;
 
-	size = 0;
+	size = 1;
 	tab = "0123456789ABCDEF";
 	temp = num;
 	while (temp /= base)
 		size++;
-	res = (char*)calloc(1,sizeof(char) * (size + 1));
+	res = (char*)ft_memalloc(sizeof(char) * (size + 1));
 	res[size--] = '\0';
-	while (size > 0)
+	while (size >= 0)
 	{
 		res[size--] = tab[num % base];
 		num /= base;

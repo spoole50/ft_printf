@@ -12,6 +12,11 @@
 
 #include "includes/ft_printf.h"
 
+int		is_empty(char q)
+{
+	return (q == '0' || q == ' ');
+}
+
 int		is_other(char q)
 {
 	return (q == '%');
@@ -25,7 +30,7 @@ int		is_conv(char q)
 
 int		is_flag(char q)
 {
-	return (q == '#' || q == '0' || q == '-' || q == '+');
+	return (q == '#' || q == '0' || q == '-' || q == '+' || q == ' ');
 }
 
 int		is_len_mod(char *str, int i)

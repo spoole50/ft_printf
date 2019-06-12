@@ -78,10 +78,10 @@ void			mod_string_unsigned(t_printf *info, t_mod *mod)
 		mod->flags->hash == '1' && mod->arg_text[0] != '0')
 		mod->precision = 1 + ft_strlen(mod->arg_text);
 	signed_prec(mod);
-	if (mod->flags && mod->flags->hash == '1' && (mod->frmt_spec == 'x'\
-		|| mod->frmt_spec == 'X') && mod->arg_text[0] != '0')
-		add_x(mod);
 	set_string(mod);
+	if (mod->flags && mod->flags->hash == '1' && (mod->frmt_spec == 'x'\
+		|| mod->frmt_spec == 'X'))
+		add_x(mod);
 	add_string(info, mod->res);
 }
 
@@ -93,8 +93,8 @@ void			mod_string_point(t_printf *info, t_mod *mod)
 	mod->len_mod[0] = 'l';
 	mod->arg_text = unsigned_len_mod(arg, mod, 16);
 	lower(mod->arg_text);
-	add_x(mod);
 	set_string(mod);
+	add_x(mod);
 	add_string(info, mod->res);
 }
 
@@ -125,7 +125,7 @@ void			mod_string_float(t_printf *info, t_mod *mod)
 	if (mod->precision == -1)
 		mod->precision = 6;
 	mod->arg_text = ft_ftoa(arg->data.flt, mod->precision);
-	if (mod->flags->plus == '1')
+	if (mod->flags && mod->flags->plus == '1')
 		add_plus(mod);
 	set_string(mod);
 	add_string(info, mod->res);

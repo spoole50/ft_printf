@@ -68,6 +68,8 @@ char			*ft_itoa(intmax_t n)
 	int		size;
 	char	*result;
 
+	if (n == -9223372036854775808U)
+		return ("-9223372036854775808");
 	result = NULL;
 	size = make_arr(n, &result);
 	if (result == NULL)
