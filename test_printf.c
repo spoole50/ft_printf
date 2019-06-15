@@ -82,6 +82,26 @@ int		main(void)
 	//s2 = ft_printf("% d\n", 42);
 	//s1 = printf("%.5f\n", 123.456789);
 	//ss2 = ft_printf("%.5f\n", 123.456789);
+	//s1 = printf("% d\n", 42);
+	//s2 = ft_printf("% d\n", 42);
+	//s1 = printf("%-5d\n", -42);
+	//s2 = ft_printf("%-5d\n", -42);
+	//s1 = printf("%03.2d\n", -1);
+	//s2 = ft_printf("%03.2d\n", -1);
+	//s1 = printf("@moulitest: %.10d\n", -42);
+	//s2 = ft_printf("@moulitest: %.10d\n", -42);
+	//s1 = printf("%+u\n", 4294967295);;
+	//s2 = ft_printf("%+u\n", 4294967295);
+	//s1 = printf("@moulitest: %#.o %#.0o\n", 0, 0);
+	//s2 = ft_printf("@moulitest: %#.o %#.0o\n", 0, 0);
+	//s1 = printf("@moulitest: %#.x %#.0x\n", 0, 0);
+	//s2 = ft_printf("@moulitest: %#.x %#.0x\n", 0, 0);
+	//s1 = printf("@moulitest: %.o %.0o\n", 0, 0);
+	//s2 = ft_printf("@moulitest: %.o %.0o\n", 0, 0);
+	s1 = printf("@moulitest: %#.o %#.0o\n", 0, 0);
+	s2 = ft_printf("@moulitest: %#.o %#.0o\n", 0, 0);
+	s1 = printf("@moulitest: %5.o %5.0o\n", 0, 0);
+	s2 = ft_printf("@moulitest: %5.o %5.0o\n", 0, 0); 
 	ft_printf("sysSize:%d ftSize:%d Match:%c\n", s1, s2, (s1==s2)?'Y':'N');
 	return (0);
 }
