@@ -52,6 +52,8 @@ void			mod_string_signed(t_printf *info, t_mod *mod)
 		else
 			mod->arg_text = ft_itoa((short)arg->data.vdata);
 	}
+	else if (mod->len_mod[0] == 'j' || mod->len_mod[0] == 'z')
+		mod->arg_text = ft_itoa((intmax_t)arg->data.vdata);
 	else
 		catch_error("mod_string_signed error", info);
 	signed_prec(mod);
@@ -76,7 +78,10 @@ void			mod_string_unsigned(t_printf *info, t_mod *mod)
 		lower(mod->arg_text);
 	if (mod->frmt_spec == 'o' && mod->flags &&\
 		mod->flags->hash == '1' && mod->arg_text[0] != '0')
-		mod->precision = 1 + ft_strlen(mod->arg_text);
+	{
+		int test = 1 + ft_strlen(mod->arg_text);
+		mod->precision = (test > mod->precision) ? test : mod->precision;
+	}
 	signed_prec(mod);
 	set_string(mod);
 	if (mod->flags && mod->flags->hash == '1' && (mod->frmt_spec == 'x'\

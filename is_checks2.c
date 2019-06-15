@@ -47,6 +47,8 @@ int		is_len_mod(char *str, int i)
 			return (2);
 		return (1);
 	}
+	else if (str[i] == 'j' || str[i] == 'z')
+		return (1);
 	return (0);
 }
 

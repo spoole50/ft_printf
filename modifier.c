@@ -29,8 +29,14 @@ void		handle_len_mod(t_printf *info, t_mod *mod)
 	int		i;
 
 	i = 0;
-	while (!(is_conv(INPUT[INDEX])))
-		mod->len_mod[i++] = INPUT[INDEX++];
+	if (mod->len_mod[i] == '0')
+	{
+		while (!(is_conv(INPUT[INDEX])) && i < 2)
+			mod->len_mod[i++] = INPUT[INDEX++];
+	}
+	else
+		while (!(is_conv(INPUT[INDEX])))
+			INDEX++;
 }
 
 void		validate_conv_spec(t_printf *info, t_mod *mod)
@@ -47,7 +53,15 @@ void		validate_conv_spec(t_printf *info, t_mod *mod)
 
 void		parse_spec(t_printf *info, t_mod *mod)
 {
-	while (INDEX[INPUT] != mod->frmt_spec)
+	char x;
+
+	x = mod->frmt_spec;
+	if (x == 'D' || x == 'O' || x == 'U')
+	{
+		mod->frmt_spec = ft_tolower(x);
+		mod->len_mod[0] = 'l';
+	}
+	while (!is_conv(INDEX[INPUT]))
 	{
 		if (is_flag(INPUT[INDEX]))
 			handle_flags(info, mod);

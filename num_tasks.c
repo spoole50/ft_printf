@@ -86,6 +86,8 @@ char		*unsigned_len_mod(t_arg_node *arg, t_mod *mod, int base)
 		else
 			temp = ft_itoab_unsigned((unsigned short)arg->data.vdata, base);
 	}
+	else if (mod->len_mod[0] == 'j' || mod->len_mod[0] == 'z')
+		temp = ft_itoab_unsigned((uintmax_t)arg->data.vdata, base);
 	else
 		temp = ft_itoab_unsigned((unsigned int)arg->data.vdata, base);
 	return (temp);

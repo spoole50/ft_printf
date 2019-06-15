@@ -19,12 +19,12 @@ int		is_space(char q)
 
 int		is_signed(char q)
 {
-	return (q == 'd' || q == 'i');
+	return (q == 'd' || q == 'i' || q == 'D');
 }
 
 int		is_unsigned(char q)
 {
-	return (q == 'o' || q == 'u' || q == 'x' || q == 'X' || q == 'p');
+	return (q == 'o' || q == 'u' || q == 'x' || q == 'X' || q == 'p' || q == 'O' || q == 'U');
 }
 
 int		is_text(char q)
