@@ -36,7 +36,7 @@ void		add_sign(t_mod *mod)
 
 	i = 0;
 	x = 0;
-	while (mod->res[i] != '\0' && !ft_isalnum(mod->res[i + 1]))
+	while (mod->res[i] != '\0' && !ft_isalnum(mod->res[i]) && !ft_isalnum(mod->res[i + 1]))
 		i++;
 	if (mod->flags && mod->flags->minus == '1')
 	{
@@ -57,7 +57,7 @@ void		set_string(t_mod *mod)
 	int		arg_len;
 
 	arg_len = ft_strlen(mod->arg_text);
-	max = (mod->sign != '0' && is_signed(mod->frmt_spec)) ? 1 : 0;
+	max = (mod->sign != '0' && is_signed(mod->frmt_spec) && mod->arg_text[0] != '\0') ? 1 : 0;
 	max = ((arg_len + max) < mod->min_wid) ? mod->min_wid : arg_len + max;
 	mod->res = ft_memalloc(max + 1);
 	if (mod->flags != NULL)
