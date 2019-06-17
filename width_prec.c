@@ -131,6 +131,24 @@ int				calc_prec(t_mod *mod, int *size)
 	return (ret);
 }
 
+void		check_zeros(t_mod *mod)
+{
+	int i;
+
+	if (mod->arg_text[0] == 48 && mod->precision == 0)
+	{
+		if (mod->frmt_spec != 'o' || (!mod->flags))
+			mod->arg_text[0] = '\0';
+	}
+	if (mod->frmt_spec == 'o' && mod->flags && mod->flags->hash == '1')
+	{
+		if (mod->arg_text[0] == '0')
+			return;
+		i = 1 + ft_strlen(mod->arg_text);
+		mod->precision = (i > mod->precision) ? i : mod->precision;
+	}
+}
+
 void		signed_prec(t_mod *mod)
 {
 	char	*temp;
@@ -142,8 +160,11 @@ void		signed_prec(t_mod *mod)
 	x = 0;
 	temp = NULL;
 	size = ft_strlen(mod->arg_text);
-	if (mod->arg_text[0] == '0' && mod->precision == 0)
+	check_zeros(mod);
+	/*if (mod->arg_text[0] == '0' && mod->precision == 0 && (!mod->flags || (mod->flags && mod->flags->hash == '0')) && mod->frmt_spec != 'o')
 		mod->arg_text[0] = '\0';
+	if (mod->frmt_spec == 'o' && mod->flags && mod->flags->hash == '1')
+		check_o_hash(mod);*/
 	if (mod->precision > size || mod->flags)
 	{
 		temp = (char*)ft_memalloc(sizeof(char) * (size + calc_prec(mod, &size) + 1));

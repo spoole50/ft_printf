@@ -76,12 +76,6 @@ void			mod_string_unsigned(t_printf *info, t_mod *mod)
 		mod->arg_text = unsigned_len_mod(arg, mod, 16);
 	if (mod->frmt_spec == 'x')
 		lower(mod->arg_text);
-	if (mod->frmt_spec == 'o' && mod->flags &&\
-		mod->flags->hash == '1' && mod->arg_text[0] != '0')
-	{
-		int test = 1 + ft_strlen(mod->arg_text);
-		mod->precision = (test > mod->precision) ? test : mod->precision;
-	}
 	signed_prec(mod);
 	set_string(mod);
 	if (mod->flags && mod->flags->hash == '1' && (mod->frmt_spec == 'x'\
