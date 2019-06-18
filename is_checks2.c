@@ -17,15 +17,10 @@ int		is_empty(char q)
 	return (q == '0' || q == ' ');
 }
 
-int		is_other(char q)
-{
-	return (q == '%');
-}
-
 int		is_conv(char q)
 {
 	return (is_signed(q) || is_unsigned(q)\
-			|| is_text(q) || is_float(q) || is_other(q));
+			|| is_text(q) || is_float(q));
 }
 
 int		is_flag(char q)

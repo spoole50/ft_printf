@@ -12,52 +12,14 @@
 
 #include "includes/ft_printf.h"
 
-void		add_flags(t_mod *mod, int max, int arg_len)
-{
-	if (mod->flags->minus == '1')
-	{
-		arg_to_string(mod);
-		while (mod->res_i < max)
-			mod->res[mod->res_i++] = ' ';
-		mod->res[mod->res_i] = '\0';
-	}
-	if (mod->flags->zero == '1' && mod->precision == -1)
-	{
-		while (mod->res_i < (max - arg_len))
-			mod->res[mod->res_i++] = '0';
-	}
-}
-
-void		add_sign(t_mod *mod)
-{
-	int i;
-	int x;
-	char *temp;
-
-	i = 0;
-	x = 0;
-	while (mod->res[i] != '\0' && !ft_isalnum(mod->res[i]) && !ft_isalnum(mod->res[i + 1]))
-		i++;
-	if (mod->flags && mod->flags->minus == '1')
-	{
-		temp = ft_strdup(mod->res);
-		temp[i++] = mod->sign;
-		while (temp[i] != '\0')
-			temp[i++] = mod->res[x++];
-		free(mod->res);
-		mod->res = temp;
-	}
-	else
-		mod->res[i] = mod->sign;
-}
-
 void		set_string(t_mod *mod)
 {
 	int		max;
 	int		arg_len;
 
 	arg_len = ft_strlen(mod->arg_text);
-	max = (mod->sign != '0' && is_signed(mod->frmt_spec) && mod->arg_text[0] != '\0') ? 1 : 0;
+	max = (mod->sign != '0' && is_signed(mod->frmt_spec)\
+	&& mod->arg_text[0] != '\0') ? 1 : 0;
 	max = ((arg_len + max) < mod->min_wid) ? mod->min_wid : arg_len + max;
 	mod->res = ft_memalloc(max + 1);
 	if (mod->flags != NULL)
@@ -75,22 +37,6 @@ void		set_string(t_mod *mod)
 	}
 	if (mod->sign != '0' && is_signed(mod->frmt_spec))
 		add_sign(mod);
-	int test;
-	test = ft_strlen(mod->res);
-}
-
-int			count_empty(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (*str != '\0')
-	{
-		if (!is_space(*str))
-			i++;
-		str++;
-	}
-	return (i);
 }
 
 void		string_precision(t_mod *mod)
@@ -108,10 +54,10 @@ void		string_precision(t_mod *mod)
 	mod->arg_text = new;
 }
 
-int				calc_prec(t_mod *mod, int *size)
+int			calc_prec(t_mod *mod, int *size)
 {
-	int ret;
-	int sign;
+	int		ret;
+	int		sign;
 
 	ret = 0;
 	sign = has_sign(mod->arg_text);
@@ -133,21 +79,25 @@ int				calc_prec(t_mod *mod, int *size)
 	return (ret);
 }
 
-void		check_zeros(t_mod *mod)
+void		signed_prec_work(t_mod *mod, char *temp, int size)
 {
 	int i;
+	int x;
 
-	if (mod->arg_text[0] == 48 && mod->precision == 0)
+	i = 0;
+	x = 0;
+	while ((i < mod->precision || i <= size) && mod->arg_text[x] != '\0')
 	{
-		if (mod->frmt_spec != 'o' || (!mod->flags))
-			mod->arg_text[0] = '\0';
-	}
-	if (mod->frmt_spec == 'o' && mod->flags && mod->flags->hash == '1')
-	{
-		if (mod->arg_text[0] == '0')
-			return;
-		i = 1 + ft_strlen(mod->arg_text);
-		mod->precision = (i > mod->precision) ? i : mod->precision;
+		if (i < (mod->precision - size))
+			temp[i++] = '0';
+		else if (mod->arg_text[x] == '-')
+		{
+			x++;
+			if (i < ((mod->precision - size) + 1) && temp[i - 1] != '0')
+				temp[i++] = '0';
+		}
+		else
+			temp[i++] = mod->arg_text[x++];
 	}
 }
 
@@ -155,34 +105,15 @@ void		signed_prec(t_mod *mod)
 {
 	char	*temp;
 	int		size;
-	int		i;
-	int		x;
 
-	i = 0;
-	x = 0;
 	temp = NULL;
 	size = ft_strlen(mod->arg_text);
 	check_zeros(mod);
-	/*if (mod->arg_text[0] == '0' && mod->precision == 0 && (!mod->flags || (mod->flags && mod->flags->hash == '0')) && mod->frmt_spec != 'o')
-		mod->arg_text[0] = '\0';
-	if (mod->frmt_spec == 'o' && mod->flags && mod->flags->hash == '1')
-		check_o_hash(mod);*/
 	if (mod->precision > size || mod->flags)
 	{
-		temp = (char*)ft_memalloc(sizeof(char) * (size + calc_prec(mod, &size) + 1));
-		while ((i < mod->precision || i <= size) && mod->arg_text[x] != '\0')
-		{
-			if (i < (mod->precision - size))
-				temp[i++] = '0';
-			else if (mod->arg_text[x] == '-')
-			{
-				x++;
-				if (i < ((mod->precision - size) + 1) && temp[i - 1] != '0')
-					temp[i++] = '0';
-			}
-			else
-				temp[i++] = mod->arg_text[x++];
-		}
+		temp = (char*)ft_memalloc(sizeof(char) *\
+		(size + calc_prec(mod, &size) + 1));
+		signed_prec_work(mod, temp, size);
 		if (temp != NULL)
 		{
 			free(mod->arg_text);

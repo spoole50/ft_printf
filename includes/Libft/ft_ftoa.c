@@ -12,43 +12,43 @@
 
 #include "libft.h"
 
-char    *ft_ftoa(double num, int precision)
+char			*ftoa_help(t_ftoa var)
 {
-    char        *res;
-    char        *temp;
-    char        *clean;
-    uintmax_t   tmp;
-    int         neg;
-    int         size;
-    int         dot;
-    int         i;
+	if (var.neg == 1)
+		var.res[var.i++] = '-';
+	while (*(var.temp) != '\0')
+	{
+		if (var.i == var.dot)
+			var.res[var.i++] = '.';
+		else
+			var.res[var.i++] = *(var.temp)++;
+	}
+	free(var.clean);
+	return (var.res);
+}
 
-    size = precision;
-    i = 0;
-    neg = 0;
-    while (size--)
-        num *= 10;
-    if (num < 0)
-    {
-        tmp = num * -1;
-        neg = 1;   
-    }
-    else
-        tmp = num;
-    temp = ft_itoab_unsigned(num, 10);
-    clean = temp;
-    size = ft_strlen(temp);
-    size += (neg == 1) ? 3 : 2;
-    res = (char*)ft_memalloc(sizeof(char) * (size));
-    dot = (neg == 1) ? ((size - precision) - 3) : ((size - precision) - 2);
-    (neg == 1) ? (res[i++] = '-') : (res[i] = '\0');
-    while (*temp != '\0')
-    {
-        if (i == dot)
-            res[i++] = '.';
-        else
-            res[i++] = *temp++; 
-    }
-    free(clean);
-    return (res);
+char			*ft_ftoa(double num, int precision)
+{
+	t_ftoa	var;
+
+	var.size = precision;
+	var.i = 0;
+	var.neg = 0;
+	while (var.size--)
+		num *= 10;
+	if (num < 0)
+	{
+		var.tmp = num * -1;
+		var.neg = 1;
+	}
+	else
+		var.tmp = num;
+	var.temp = ft_itoab_unsigned(num, 10);
+	var.clean = var.temp;
+	var.size = ft_strlen(var.temp);
+	var.size += (var.neg == 1) ? 3 : 2;
+	var.res = (char*)ft_memalloc(sizeof(char) * (var.size));
+	var.dot = (var.neg == 1) ? ((var.size - precision) - 3)\
+	: ((var.size - precision) - 2);
+	return (ftoa_help(var));
 }

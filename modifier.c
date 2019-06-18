@@ -83,7 +83,7 @@ void		handle_mod(t_printf *info, va_list ap)
 
 	mod = t_mod_init(info);
 	validate_conv_spec(info, mod);
-	if (is_other(mod->frmt_spec))
+	if (mod->frmt_spec == '%')
 		mod->arg_text = "%";
 	else
 	{
@@ -93,7 +93,7 @@ void		handle_mod(t_printf *info, va_list ap)
 			mod->arg_num = add_next_arg(info, ap, mod->frmt_spec);
 	}
 	parse_spec(info, mod);
-	if (is_text(mod->frmt_spec) || is_other(mod->frmt_spec))
+	if (is_text(mod->frmt_spec))
 		mod_string_char(info, mod);
 	else if (mod->frmt_spec == 'p')
 		mod_string_point(info, mod);

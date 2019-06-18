@@ -6,7 +6,7 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 14:43:31 by spoole            #+#    #+#             */
-/*   Updated: 2018/12/17 16:45:37 by spoole           ###   ########.fr       */
+/*   Updated: 2019/06/17 23:18:21 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,26 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+typedef struct			s_ftoa
+{
+	char				*res;
+	char				*temp;
+	char				*clean;
+	uintmax_t			tmp;
+	int					neg;
+	int					size;
+	int					dot;
+	int					i;
+}						t_ftoa;
+
 /*
 **	Conversion
 */
 int						ft_atoi(const char *str);
 char					*ft_itoa(intmax_t n);
-char    				*ft_itoab_unsigned(uintmax_t num, int base);
-char    				*ft_itoab_signed(intmax_t num, int base);
-char    				*ft_ftoa(double num, int precision);
+char					*ft_itoab_unsigned(uintmax_t num, int base);
+char					*ft_itoab_signed(intmax_t num, int base);
+char					*ft_ftoa(double num, int precision);
 /*
 **	String Manipulation & Characterization
 */

@@ -12,22 +12,6 @@
 
 #include "includes/ft_printf.h"
 
-void			print_zero(t_printf *info)
-{
-	char	*temp;
-	int 	i;
-	int		x;
-
-	i = 0;
-	x = 0;
-	info->tot_writes++;
-	temp = (char*)ft_memalloc(ft_strlen(info->result) + 2);
-	while (info->result && info->result[i] != '\0')
-		temp[x++] = info->result[i++];
-	free(info->result);
-	info->result = temp;
-}
-
 void			mod_string_char(t_printf *info, t_mod *mod)
 {
 	t_arg_node	*arg;
@@ -41,7 +25,8 @@ void			mod_string_char(t_printf *info, t_mod *mod)
 		mod->arg_text = "(null)";
 	else if (mod->frmt_spec != '%')
 		mod->arg_text = (char*)arg->data.vdata;
-	if (mod->precision != -1 && mod->frmt_spec != 'c' && mod->arg_text[0] != '%')
+	if (mod->precision != -1 && mod->frmt_spec != 'c'\
+	&& mod->arg_text[0] != '%')
 		string_precision(mod);
 	if (mod->frmt_spec == 'c' && mod->arg_text[0] == '\0')
 		print_zero(info);
@@ -77,11 +62,7 @@ void			mod_string_signed(t_printf *info, t_mod *mod)
 		mod->arg_text = ft_itoa((intmax_t)arg->data.vdata);
 	else
 		catch_error("mod_string_signed error", info);
-	signed_prec(mod);
-	set_string(mod);
-	(mod->res != NULL) ? add_string(info, mod->res) :\
-	catch_error("mod_string_signed width_prec error", info);
-		
+	finish_signed(info, mod);
 }
 
 void			mod_string_unsigned(t_printf *info, t_mod *mod)
@@ -116,25 +97,6 @@ void			mod_string_point(t_printf *info, t_mod *mod)
 	set_string(mod);
 	add_x(mod);
 	add_string(info, mod->res);
-}
-
-void			add_plus(t_mod *mod)
-{
-	char	*temp;
-	int		size;
-	int		i;
-	int		x;
-
-	i = 0;
-	x = 0;
-	size = ft_strlen(mod->arg_text);
-	size++;
-	temp = (char*)ft_memalloc(size + 1);
-	temp[i++] = '+';
-	while (mod->arg_text[x] != '\0')
-		temp[i++] = mod->arg_text[x++];
-	free(mod->arg_text);
-	mod->arg_text = temp;
 }
 
 void			mod_string_float(t_printf *info, t_mod *mod)

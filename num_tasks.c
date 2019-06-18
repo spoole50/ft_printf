@@ -41,12 +41,12 @@ void		lower(char *str)
 
 int			is_zeros(char *s1)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (s1[i] != '\0')
 	{
-		if (s1[i] != '0')
+		if (!is_empty(s1[i]))
 			return (0);
 		i++;
 	}
@@ -62,16 +62,15 @@ void		add_x(t_mod *mod)
 
 	i = 0;
 	x = 0;
+	tmp = NULL;
 	if (is_zeros(mod->res) && mod->frmt_spec != 'p')
-		return;
+		return ;
 	size = ft_strlen(mod->res);
 	size += (mod->min_wid == 0 || mod->min_wid < size) ? 3 : 1;
 	tmp = (char*)ft_memalloc(sizeof(char) * size);
 	if (mod->min_wid != 0 && !ft_isalnum(mod->res[0]))
-	{
 		while (!ft_isalnum(mod->res[x + 2]))
 			tmp[i++] = mod->res[x++];
-	}
 	x += (mod->min_wid != 0 && is_empty(mod->res[i])) ? 2 : 0;
 	tmp[i++] = '0';
 	tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
