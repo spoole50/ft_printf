@@ -39,6 +39,20 @@ void		lower(char *str)
 	}
 }
 
+int			is_zeros(char *s1)
+{
+	int i;
+
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		if (s1[i] != '0')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void		add_x(t_mod *mod)
 {
 	int		size;
@@ -48,10 +62,10 @@ void		add_x(t_mod *mod)
 
 	i = 0;
 	x = 0;
-	if ((mod->res[0] == '0' && mod->res[1] == '\0') || mod->precision == 0)
+	if (is_zeros(mod->res) && mod->frmt_spec != 'p')
 		return;
 	size = ft_strlen(mod->res);
-	size += (mod->min_wid == 0) ? 3 : 1;
+	size += (mod->min_wid == 0 || mod->min_wid < size) ? 3 : 1;
 	tmp = (char*)ft_memalloc(sizeof(char) * size);
 	if (mod->min_wid != 0 && !ft_isalnum(mod->res[0]))
 	{
@@ -61,9 +75,10 @@ void		add_x(t_mod *mod)
 	x += (mod->min_wid != 0 && is_empty(mod->res[i])) ? 2 : 0;
 	tmp[i++] = '0';
 	tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
-	while (i < size)
+	while (i < (size - 1))
 		tmp[i++] = mod->res[x++];
-	free(mod->res);
+	if (mod->res)
+		free(mod->res);
 	mod->res = tmp;
 }
 

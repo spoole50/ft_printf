@@ -12,6 +12,22 @@
 
 #include "includes/ft_printf.h"
 
+void			print_zero(t_printf *info)
+{
+	char	*temp;
+	int 	i;
+	int		x;
+
+	i = 0;
+	x = 0;
+	info->tot_writes++;
+	temp = (char*)ft_memalloc(ft_strlen(info->result) + 2);
+	while (info->result && info->result[i] != '\0')
+		temp[x++] = info->result[i++];
+	free(info->result);
+	info->result = temp;
+}
+
 void			mod_string_char(t_printf *info, t_mod *mod)
 {
 	t_arg_node	*arg;
@@ -25,10 +41,15 @@ void			mod_string_char(t_printf *info, t_mod *mod)
 		mod->arg_text = "(null)";
 	else if (mod->frmt_spec != '%')
 		mod->arg_text = (char*)arg->data.vdata;
-	if (mod->precision != -1 && mod->frmt_spec != 'c')
+	if (mod->precision != -1 && mod->frmt_spec != 'c' && mod->arg_text[0] != '%')
 		string_precision(mod);
-	set_string(mod);
-	add_string(info, mod->res);
+	if (mod->frmt_spec == 'c' && mod->arg_text[0] == '\0')
+		print_zero(info);
+	else
+	{
+		set_string(mod);
+		add_string(info, mod->res);
+	}
 }
 
 void			mod_string_signed(t_printf *info, t_mod *mod)

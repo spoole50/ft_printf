@@ -75,6 +75,8 @@ void		set_string(t_mod *mod)
 	}
 	if (mod->sign != '0' && is_signed(mod->frmt_spec))
 		add_sign(mod);
+	int test;
+	test = ft_strlen(mod->res);
 }
 
 int			count_empty(char *str)
