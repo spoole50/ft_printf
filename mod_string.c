@@ -94,6 +94,13 @@ void			mod_string_point(t_printf *info, t_mod *mod)
 	mod->len_mod[0] = 'l';
 	mod->arg_text = unsigned_len_mod(arg, mod, 16);
 	lower(mod->arg_text);
+	if (mod->precision == 0 && mod->arg_text != NULL)
+	{
+		free(mod->arg_text);
+		mod->arg_text = "";
+	}
+	else if (mod->precision != -1)
+		signed_prec(mod);
 	set_string(mod);
 	add_x(mod);
 	add_string(info, mod->res);

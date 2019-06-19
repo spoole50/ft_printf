@@ -14,9 +14,15 @@
 
 void			catch_error(char *s1, t_printf *clean)
 {
-	clean_tprintf(clean);
-	ft_putstr(s1);
-	exit(EXIT_FAILURE);
+	//clean_tprintf(clean);
+	//ft_putstr(s1);
+	s1++;
+	ft_putstr("\n");
+	clean->tot_writes = -1;
+	if (clean->result != NULL)
+		free(clean->result);
+	clean->result = "";
+	//exit(EXIT_FAILURE);
 }
 
 int				ft_vasprintf(char **str, const char *input, va_list ap)

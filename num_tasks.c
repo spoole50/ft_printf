@@ -53,6 +53,38 @@ int			is_zeros(char *s1)
 	return (1);
 }
 
+int			calc_x_pad(t_mod *mod, int size)
+{
+	int		sp;
+	int 	i;
+
+	sp = 0;
+	i = 0;
+	while (mod->res[i] != '\0')
+		if (is_space(mod->res[i++]))
+			sp++;
+	i = size;
+	i -= sp;
+	if (size == i)
+		return (3);
+	else if (size >= mod->min_wid && i > 2 && size > i)
+		return ((size - i) + 1);
+	else
+		return (1);
+}
+
+int			calc_more_pad(t_mod *mod, int i)
+{
+	if (mod->min_wid != 0)
+	{
+		if (mod->frmt_spec == 'p' && is_space(mod->res[i]))
+			return (2);
+		else if (mod->frmt_spec != 'p' && is_empty(mod->res[i]))
+			return (2);
+	}
+	return (0);
+}
+
 void		add_x(t_mod *mod)
 {
 	int		size;
@@ -66,12 +98,13 @@ void		add_x(t_mod *mod)
 	if (is_zeros(mod->res) && mod->frmt_spec != 'p')
 		return ;
 	size = ft_strlen(mod->res);
-	size += (mod->min_wid == 0 || mod->min_wid < size) ? 3 : 1;
+	size += calc_x_pad(mod, size);
 	tmp = (char*)ft_memalloc(sizeof(char) * size);
 	if (mod->min_wid != 0 && !ft_isalnum(mod->res[0]))
 		while (!ft_isalnum(mod->res[x + 2]))
 			tmp[i++] = mod->res[x++];
-	x += (mod->min_wid != 0 && is_empty(mod->res[i])) ? 2 : 0;
+	//x += (mod->min_wid != 0 && is_space(mod->res[i])) ? 2 : 0;
+	x += calc_more_pad(mod, i);
 	tmp[i++] = '0';
 	tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
 	while (i < (size - 1))
