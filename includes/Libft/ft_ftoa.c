@@ -38,17 +38,16 @@ char			*ft_ftoa(double num, int precision)
 		num *= 10;
 	if (num < 0)
 	{
-		var.tmp = num * -1;
+		var.tmp = (num - 0.5) * -1;
 		var.neg = 1;
 	}
 	else
-		var.tmp = num;
-	var.temp = ft_itoab_unsigned(num, 10);
+		var.tmp = num + 0.5;
+	var.temp = ft_itoab_unsigned(var.tmp, 10);
 	var.clean = var.temp;
 	var.size = ft_strlen(var.temp);
 	var.size += (var.neg == 1) ? 3 : 2;
 	var.res = (char*)ft_memalloc(sizeof(char) * (var.size));
-	var.dot = (var.neg == 1) ? ((var.size - precision) - 3)\
-	: ((var.size - precision) - 2);
+	var.dot = (var.size - precision) - 2;
 	return (ftoa_help(var));
 }

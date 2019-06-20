@@ -16,7 +16,9 @@ void		set_string(t_mod *mod)
 {
 	int		max;
 	int		arg_len;
+	int		i;
 
+	i = 0;
 	arg_len = ft_strlen(mod->arg_text);
 	max = (mod->sign != '0' && is_signed(mod->frmt_spec)\
 	&& mod->arg_text[0] != '\0') ? 1 : 0;
@@ -33,9 +35,9 @@ void		set_string(t_mod *mod)
 	else
 	{
 		while (mod->res_i < max)
-			mod->res[mod->res_i++] = *mod->arg_text++;
+			mod->res[mod->res_i++] = mod->arg_text[i++];
 	}
-	if (mod->sign != '0' && is_signed(mod->frmt_spec))
+	if (mod->sign != '0' && (is_signed(mod->frmt_spec) || mod->frmt_spec == 'f'))
 		add_sign(mod);
 }
 
@@ -65,7 +67,7 @@ int			calc_prec(t_mod *mod, int *size)
 	{
 		if (mod->flags->plus == '1' && !(sign))
 			mod->sign = '+';
-		else if (mod->flags->space == '1' && is_signed(mod->frmt_spec))
+		else if (mod->flags->space == '1' && (is_signed(mod->frmt_spec) || is_float(mod->frmt_spec)))
 			mod->sign = ' ';
 	}
 	if (mod->precision > *size)
@@ -79,7 +81,7 @@ int			calc_prec(t_mod *mod, int *size)
 	return (ret);
 }
 
-void		signed_prec_work(t_mod *mod, char *temp, int size)
+void	signed_prec_work(t_mod *mod, char *temp, int size)
 {
 	int i;
 	int x;
@@ -111,7 +113,7 @@ void		signed_prec(t_mod *mod)
 	check_zeros(mod);
 	if (mod->precision > size || mod->flags)
 	{
-		temp = (char*)ft_memalloc(sizeof(char) *\
+		temp = (char*)ft_strnew(sizeof(char) *\
 		(size + calc_prec(mod, &size) + 1));
 		signed_prec_work(mod, temp, size);
 		if (temp != NULL)

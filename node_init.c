@@ -12,14 +12,14 @@
 
 #include "includes/ft_printf.h"
 
-t_flags			*t_flags_init(t_printf *info, t_mod *mod)
+t_flags			*t_flags_init(t_mod *mod)
 {
 	t_flags		*temp;
 
 	if ((temp = (t_flags*)malloc(sizeof(t_flags))) == NULL)
 	{
 		free(mod);
-		catch_error("t_flags init error", info);
+		return (NULL);
 	}
 	temp->hash = '0';
 	temp->minus = '0';
@@ -29,12 +29,12 @@ t_flags			*t_flags_init(t_printf *info, t_mod *mod)
 	return (temp);
 }
 
-t_mod			*t_mod_init(t_printf *info)
+t_mod			*t_mod_init(void)
 {
 	t_mod		*temp;
 
 	if ((temp = (t_mod*)malloc(sizeof(t_mod))) == NULL)
-		catch_error("t_mod init error", info);
+		return (NULL);
 	temp->min_wid = 0;
 	temp->arg_num = 0;
 	temp->precision = -1;
@@ -52,8 +52,14 @@ t_mod			*t_mod_init(t_printf *info)
 
 void			clean_tmod(t_mod *mod)
 {
+	char x;
+
+	x = mod->frmt_spec;
 	if (mod->flags != NULL)
 		free(mod->flags);
+	if (mod->arg_text != NULL && !is_text(x) && x != 'p')
+		if (ft_strcmp(mod->arg_text, "-9223372036854775808"))
+			free(mod->arg_text);
 	free(mod);
 }
 
@@ -82,7 +88,7 @@ t_printf		*t_printf_init(char *in)
 	t_printf	*temp;
 
 	if ((temp = (t_printf*)malloc(sizeof(t_printf))) == NULL)
-		catch_error("t_printf initialization error", NULL);
+		return (NULL);
 	temp->tot_writes = 0;
 	temp->in = 0;
 	temp->input = in;

@@ -82,8 +82,9 @@ int						ft_asprintf(char **str, const char *input, ...);
 ** ft_vasprintf main program entry functions
 ** ft_vasprintf.c
 */
+int						has_sign(char *s1);
+void					lower(char *str);
 int						ft_vasprintf(char **str, const char *input, va_list ap);
-void					catch_error(char *s1, t_printf *clean);
 
 /*
 ** String Task Functions
@@ -97,8 +98,8 @@ void					add_text(t_printf *info, int len);
 ** General Node Functions
 **	node_init.c
 */
-t_flags					*t_flags_init(t_printf *info, t_mod *mod);
-t_mod					*t_mod_init(t_printf *info);
+t_flags					*t_flags_init(t_mod *mod);
+t_mod					*t_mod_init(void);
 void					clean_tmod(t_mod *mod);
 void					clean_tprintf(t_printf *info);
 t_printf				*t_printf_init(char *in);
@@ -181,8 +182,6 @@ void					add_flags(t_mod *mod, int max, int arg_len);
 ** Num Task Functions
 ** num_tasks.c
 */
-int						has_sign(char *s1);
-void					lower(char *str);
 void					add_x(t_mod *mod);
 char					*unsigned_len_mod(t_arg_node *arg,\
 						t_mod *mod, int base);

@@ -27,7 +27,8 @@ int				handle_mult_arg(t_printf *info, va_list ap, char fs)
 	if (i > info->max_args)
 		info->max_args = i;
 	while (info->cur_args < info->max_args)
-		add_next_arg(info, ap, fs);
+		if ((add_next_arg(info, ap, fs)) == -1)
+			return (-1);
 	while (INPUT[INDEX] != '$')
 		INDEX++;
 	INDEX++;
@@ -38,7 +39,8 @@ int				add_next_arg(t_printf *info, va_list ap, char fs)
 {
 	t_arg_node	*temp;
 
-	temp = arg_node_init(info);
+	if ((temp = arg_node_init(info)) == NULL)
+		return (-1);
 	if (is_float(fs))
 		temp->data.flt = (double)va_arg(ap, double);
 	else
@@ -52,7 +54,7 @@ t_arg_node		*arg_node_init(t_printf *info)
 	t_arg_node	*iter;
 
 	if ((temp = (t_arg_node*)malloc(sizeof(t_arg_node))) == NULL)
-		catch_error("t_arg_node initialization error", info);
+		return (NULL);
 	temp->index = info->cur_args + 1;
 	temp->next = NULL;
 	temp->data.vdata = NULL;

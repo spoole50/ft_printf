@@ -34,7 +34,7 @@ void		handle_flags(t_printf *info, t_mod *mod)
 {
 	t_flags	*temp;
 
-	temp = t_flags_init(info, mod);
+	temp = t_flags_init(mod);
 	while (is_flag(INPUT[INDEX]) || is_space(INPUT[INDEX]))
 	{
 		if (INPUT[INDEX] == '#')

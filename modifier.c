@@ -47,7 +47,7 @@ void		validate_conv_spec(t_printf *info, t_mod *mod)
 	i = 0;
 	INDEX++;
 	if ((len = is_invalid_conv_spec(INPUT, INDEX)) == -1)
-		catch_error("Invalid Conversion Specification", info);
+		return ;
 	mod->frmt_spec = INPUT[INDEX + len];
 }
 
@@ -81,7 +81,7 @@ void		handle_mod(t_printf *info, va_list ap)
 {
 	t_mod	*mod;
 
-	mod = t_mod_init(info);
+	mod = t_mod_init();
 	validate_conv_spec(info, mod);
 	if (mod->frmt_spec == '%')
 		mod->arg_text = "%";

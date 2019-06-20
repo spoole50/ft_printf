@@ -51,6 +51,5 @@ void			finish_signed(t_printf *info, t_mod *mod)
 {
 	signed_prec(mod);
 	set_string(mod);
-	(mod->res != NULL) ? add_string(info, mod->res) :\
-	catch_error("mod_string_signed width_prec error", info);
+	add_string(info, mod->res);
 }

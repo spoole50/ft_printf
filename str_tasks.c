@@ -42,7 +42,7 @@ void		add_text(t_printf *info, int len)
 
 	i = 0;
 	if ((temp = (char*)malloc(sizeof(char) * (len + 1))) == NULL)
-		catch_error("add_text init error", info);
+		return ;
 	len += INDEX;
 	while (INDEX < len)
 		temp[i++] = INPUT[INDEX++];

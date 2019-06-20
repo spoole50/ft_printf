@@ -12,17 +12,31 @@
 
 #include "includes/ft_printf.h"
 
-void			catch_error(char *s1, t_printf *clean)
+int				has_sign(char *s1)
 {
-	//clean_tprintf(clean);
-	//ft_putstr(s1);
-	s1++;
-	ft_putstr("\n");
-	clean->tot_writes = -1;
-	if (clean->result != NULL)
-		free(clean->result);
-	clean->result = "";
-	//exit(EXIT_FAILURE);
+	int		i;
+
+	i = 0;
+	while (s1[i] != '\0')
+	{
+		if (s1[i] == '-')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void			lower(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] >= 'A' && str[i] <= 'Z')
+			str[i] = ft_tolower(str[i]);
+		i++;
+	}
 }
 
 int				ft_vasprintf(char **str, const char *input, va_list ap)
@@ -33,7 +47,7 @@ int				ft_vasprintf(char **str, const char *input, va_list ap)
 	info = t_printf_init((char*)input);
 	count = 0;
 	if (input == NULL)
-		catch_error("Null/invalid input string", NULL);
+		return (-1);
 	while (info->input[info->in] != '\0')
 	{
 		count = next_percent(info);

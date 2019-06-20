@@ -51,6 +51,5 @@ int	    	ft_vasprintf(char **str, const char *input, va_list ap);
 void 		validate_mod(t_printf *info);
 t_printf    *init(char *in, va_list ap);
 t_frmt      *finit(void);
-void        catch_error(char *s1, t_printf *clean);
 
 #endif

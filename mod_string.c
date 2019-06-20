@@ -61,7 +61,7 @@ void			mod_string_signed(t_printf *info, t_mod *mod)
 	else if (mod->len_mod[0] == 'j' || mod->len_mod[0] == 'z')
 		mod->arg_text = ft_itoa((intmax_t)arg->data.vdata);
 	else
-		catch_error("mod_string_signed error", info);
+		return ;
 	finish_signed(info, mod);
 }
 
@@ -116,6 +116,8 @@ void			mod_string_float(t_printf *info, t_mod *mod)
 	mod->arg_text = ft_ftoa(arg->data.flt, mod->precision);
 	if (mod->flags && mod->flags->plus == '1')
 		add_plus(mod);
+	if (mod->flags)
+		signed_prec(mod);
 	set_string(mod);
 	add_string(info, mod->res);
 }

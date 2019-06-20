@@ -6,38 +6,11 @@
 /*   By: spoole <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/25 23:05:20 by spoole            #+#    #+#             */
-/*   Updated: 2019/05/25 23:45:01 by spoole           ###   ########.fr       */
+/*   Updated: 2019/06/19 23:33:23 by spoole           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
-
-int			has_sign(char *s1)
-{
-	int		i;
-
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		if (s1[i] == '-')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void		lower(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] >= 'A' && str[i] <= 'Z')
-			str[i] = ft_tolower(str[i]);
-		i++;
-	}
-}
 
 int			is_zeros(char *s1)
 {
@@ -56,7 +29,7 @@ int			is_zeros(char *s1)
 int			calc_x_pad(t_mod *mod, int size)
 {
 	int		sp;
-	int 	i;
+	int		i;
 
 	sp = 0;
 	i = 0;
@@ -103,7 +76,6 @@ void		add_x(t_mod *mod)
 	if (mod->min_wid != 0 && !ft_isalnum(mod->res[0]))
 		while (!ft_isalnum(mod->res[x + 2]))
 			tmp[i++] = mod->res[x++];
-	//x += (mod->min_wid != 0 && is_space(mod->res[i])) ? 2 : 0;
 	x += calc_more_pad(mod, i);
 	tmp[i++] = '0';
 	tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
