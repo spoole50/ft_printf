@@ -27,7 +27,7 @@ char			*ftoa_help(t_ftoa var)
 	return (var.res);
 }
 
-char			*ft_ftoa(double num, int precision)
+char			*ft_ftoa(long double num, int precision)
 {
 	t_ftoa	var;
 

@@ -23,9 +23,9 @@
 
 typedef union			u_data
 {
-	void	*vdata;
-	double	flt;
-	long	ld;
+	void				*vdata;
+	double				flt;
+	long double			ld;
 }						t_data;
 
 typedef struct			s_flags
@@ -84,6 +84,8 @@ int						ft_asprintf(char **str, const char *input, ...);
 */
 int						has_sign(char *s1);
 void					lower(char *str);
+void					sort_spec(t_printf *info, t_mod *mod);
+int						need_sign(t_mod *mod);
 int						ft_vasprintf(char **str, const char *input, va_list ap);
 
 /*
@@ -108,8 +110,8 @@ t_printf				*t_printf_init(char *in);
 ** Argument Node Functions
 ** arg_node.c
 */
-int						handle_mult_arg(t_printf *info, va_list ap, char fs);
-int						add_next_arg(t_printf *info, va_list ap, char fs);
+int						handle_mult_arg(t_printf *info, va_list ap, char fs, char lm);
+int						add_next_arg(t_printf *info, va_list ap, char fs, char lm);
 t_arg_node				*arg_node_init(t_printf *info);
 t_arg_node				*find_arg(t_arg_node *begin, int arg_num);
 
@@ -191,7 +193,7 @@ char					*unsigned_len_mod(t_arg_node *arg,\
 ** modifiers.c
 */
 int						read_number(t_printf *info);
-void					handle_mod(t_printf *info, va_list ap);
+int						handle_mod(t_printf *info, va_list ap);
 void					set_string(t_mod *mod);
 int						check_arg(char *str, int i);
 

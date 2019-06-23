@@ -20,15 +20,15 @@ void			mod_string_char(t_printf *info, t_mod *mod)
 	if (mod->frmt_spec != '%')
 		arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->frmt_spec == 'c' || mod->frmt_spec == 'C')
-		mod->arg_text = (char*)&arg->data.vdata;
+		mod->arg_text = (char*)(&arg->data.vdata);
 	else if (arg != NULL && arg->data.vdata == NULL)
 		mod->arg_text = "(null)";
 	else if (mod->frmt_spec != '%')
 		mod->arg_text = (char*)arg->data.vdata;
-	if (mod->precision != -1 && mod->frmt_spec != 'c'\
-	&& mod->arg_text[0] != '%')
+	if (mod->precision != -1 && mod->arg_text[0] != '%'\
+	&& mod->frmt_spec != 'c')
 		string_precision(mod);
-	if (mod->frmt_spec == 'c' && mod->arg_text[0] == '\0')
+	if (mod->frmt_spec == 'c' && mod->arg_text[0] == '\0' && mod->min_wid == 0)
 		print_zero(info);
 	else
 	{
@@ -97,13 +97,15 @@ void			mod_string_point(t_printf *info, t_mod *mod)
 	if (mod->precision == 0 && mod->arg_text != NULL)
 	{
 		free(mod->arg_text);
-		mod->arg_text = "";
+		mod->arg_text = NULL;
 	}
 	else if (mod->precision != -1)
 		signed_prec(mod);
 	set_string(mod);
 	add_x(mod);
 	add_string(info, mod->res);
+	if (mod->arg_text && mod->arg_text[0] != '\0')
+		free(mod->arg_text);
 }
 
 void			mod_string_float(t_printf *info, t_mod *mod)
@@ -113,7 +115,10 @@ void			mod_string_float(t_printf *info, t_mod *mod)
 	arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->precision == -1)
 		mod->precision = 6;
-	mod->arg_text = ft_ftoa(arg->data.flt, mod->precision);
+	if (mod->len_mod[0] == 'L')
+		mod->arg_text = ft_ftoa(arg->data.ld, mod->precision);
+	else
+		mod->arg_text = ft_ftoa(arg->data.flt, mod->precision);
 	if (mod->flags && mod->flags->plus == '1')
 		add_plus(mod);
 	if (mod->flags)

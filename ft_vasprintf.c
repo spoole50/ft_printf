@@ -28,7 +28,7 @@ int				has_sign(char *s1)
 
 void			lower(char *str)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	while (str[i] != '\0')
@@ -37,6 +37,26 @@ void			lower(char *str)
 			str[i] = ft_tolower(str[i]);
 		i++;
 	}
+}
+
+void			sort_spec(t_printf *info, t_mod *mod)
+{
+	if (is_text(mod->frmt_spec))
+		mod_string_char(info, mod);
+	else if (mod->frmt_spec == 'p')
+		mod_string_point(info, mod);
+	else if (is_signed(mod->frmt_spec))
+		mod_string_signed(info, mod);
+	else if (is_unsigned(mod->frmt_spec))
+		mod_string_unsigned(info, mod);
+	else if (is_float(mod->frmt_spec))
+		mod_string_float(info, mod);
+}
+
+int				need_sign(t_mod *mod)
+{
+	return (mod->sign != '0' && (is_signed(mod->frmt_spec)\
+	|| mod->frmt_spec == 'f'));
 }
 
 int				ft_vasprintf(char **str, const char *input, va_list ap)
@@ -54,10 +74,16 @@ int				ft_vasprintf(char **str, const char *input, va_list ap)
 		if (count > 0)
 			add_text(info, count);
 		else
-			handle_mod(info, ap);
+		{
+			if ((count = (handle_mod(info, ap))) == -1)
+				break ;
+		}
 	}
-	*str = info->result;
-	count = info->tot_writes;
+	if (info->result)
+	{
+		*str = info->result;
+		count = info->tot_writes;
+	}
 	clean_tprintf(info);
 	return (count);
 }

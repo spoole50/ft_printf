@@ -78,8 +78,11 @@ void		arg_to_string(t_mod *mod)
 	int		i;
 
 	i = 0;
-	while (mod->arg_text[i] != '\0')
-		mod->res[mod->res_i++] = mod->arg_text[i++];
-	if (*(mod->arg_text) == '\0' && i == 0 && mod->frmt_spec == 'c')
-		mod->res[mod->res_i++] = (char)0;
+	if (mod->arg_text)
+	{
+		while (mod->arg_text[i] != '\0')
+			mod->res[mod->res_i++] = mod->arg_text[i++];
+		if (*(mod->arg_text) == '\0' && i == 0 && mod->frmt_spec == 'c')
+			mod->res[mod->res_i++] = (char)0;
+	}
 }

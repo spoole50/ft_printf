@@ -32,15 +32,21 @@ int			calc_x_pad(t_mod *mod, int size)
 	int		i;
 
 	sp = 0;
-	i = 0;
-	while (mod->res[i] != '\0')
-		if (is_space(mod->res[i++]))
+	i = -1;
+	while (mod->res[++i] != '\0')
+	{
+		if (is_space(mod->res[i]))
 			sp++;
+		if (mod->frmt_spec == 'p' && mod->flags && mod->flags->zero == '1' && mod->res[i] == '0')
+			sp++;
+	}
 	i = size;
 	i -= sp;
 	if (size == i)
 		return (3);
-	else if (size >= mod->min_wid && i > 2 && size > i)
+	else if (sp > 2)
+		return (1);
+	else if (size >= mod->min_wid && i > 2)
 		return ((size - i) + 1);
 	else
 		return (1);

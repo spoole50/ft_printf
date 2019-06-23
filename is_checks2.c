@@ -52,11 +52,13 @@ int		is_invalid_conv_spec(char *str, int i)
 	int x;
 
 	x = i;
-	while (!(ft_isalpha(str[x])) && !(is_conv(str[x])))
+	while (str[x] != '\0' && !(ft_isalpha(str[x])) && !(is_conv(str[x])))
 		x++;
 	x += is_len_mod(str, x);
 	if (is_conv(str[x]))
 		return (x - i);
+	else if (str[x] == '\0')
+		return (0);
 	else
 		return (-1);
 }

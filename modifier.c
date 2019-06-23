@@ -39,21 +39,22 @@ void		handle_len_mod(t_printf *info, t_mod *mod)
 			INDEX++;
 }
 
-void		validate_conv_spec(t_printf *info, t_mod *mod)
+int			validate_conv_spec(t_printf *info, t_mod *mod)
 {
-	int	len;
-	int	i;
+	int		len;
+	int		i;
 
 	i = 0;
 	INDEX++;
 	if ((len = is_invalid_conv_spec(INPUT, INDEX)) == -1)
-		return ;
+		return (-1);
 	mod->frmt_spec = INPUT[INDEX + len];
+	return (0);
 }
 
 void		parse_spec(t_printf *info, t_mod *mod)
 {
-	char x;
+	char	x;
 
 	x = mod->frmt_spec;
 	if (x == 'D' || x == 'O' || x == 'U')
@@ -77,31 +78,32 @@ void		parse_spec(t_printf *info, t_mod *mod)
 	INDEX++;
 }
 
-void		handle_mod(t_printf *info, va_list ap)
+int			handle_mod(t_printf *info, va_list ap)
 {
 	t_mod	*mod;
+	int		valid;
 
 	mod = t_mod_init();
-	validate_conv_spec(info, mod);
+	valid = validate_conv_spec(info, mod);
+	if (valid == -1 || !is_conv(mod->frmt_spec))
+	{
+		free(mod);
+		if (valid == -1)
+			return (-1);
+		else
+			return (0);
+	}
+	parse_spec(info, mod);
 	if (mod->frmt_spec == '%')
 		mod->arg_text = "%";
 	else
 	{
 		if (check_arg(INPUT, INDEX))
-			mod->arg_num = handle_mult_arg(info, ap, mod->frmt_spec);
+			mod->arg_num = handle_mult_arg(info, ap, mod->frmt_spec, mod->len_mod[0]);
 		else
-			mod->arg_num = add_next_arg(info, ap, mod->frmt_spec);
+			mod->arg_num = add_next_arg(info, ap, mod->frmt_spec, mod->len_mod[0]);
 	}
-	parse_spec(info, mod);
-	if (is_text(mod->frmt_spec))
-		mod_string_char(info, mod);
-	else if (mod->frmt_spec == 'p')
-		mod_string_point(info, mod);
-	else if (is_signed(mod->frmt_spec))
-		mod_string_signed(info, mod);
-	else if (is_unsigned(mod->frmt_spec))
-		mod_string_unsigned(info, mod);
-	else if (is_float(mod->frmt_spec))
-		mod_string_float(info, mod);
+	sort_spec(info, mod);
 	clean_tmod(mod);
+	return (0);
 }
