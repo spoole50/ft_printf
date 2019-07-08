@@ -178,7 +178,7 @@ void					signed_prec(t_mod *mod);
 */
 void					check_zeros(t_mod *mod);
 int						count_empty(char *str);
-void					add_flags(t_mod *mod, int max, int arg_len);
+void					add_flags(t_mod *mod, int max, int *arg_len);
 
 /*
 ** Num Task Functions

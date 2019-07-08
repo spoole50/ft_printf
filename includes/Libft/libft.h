@@ -26,6 +26,8 @@ typedef struct			s_ftoa
 	int					size;
 	int					dot;
 	int					i;
+	int					sub_z;
+	int					str_len;
 }						t_ftoa;
 
 /*

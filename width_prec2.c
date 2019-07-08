@@ -27,7 +27,8 @@ void		check_zeros(t_mod *mod)
 		if (mod->arg_text[0] == '0')
 			return ;
 		i = 1 + ft_strlen(mod->arg_text);
-		mod->precision = (i > mod->precision) ? i : mod->precision;
+		if (mod->min_wid == 0 || mod->flags->zero == '0' || i > mod->min_wid || mod->precision != -1) 
+			mod->precision = (i > mod->precision) ? i : mod->precision;
 	}
 }
 
@@ -45,20 +46,29 @@ int			count_empty(char *str)
 	return (i);
 }
 
-void		add_flags(t_mod *mod, int max, int arg_len)
+void		add_flags(t_mod *mod, int max, int *arg_len)
 {
 	if (mod->flags->minus == '1')
 	{
+		if (mod->flags->plus == '1')
+		{
+			mod->res[mod->res_i++] = mod->sign;
+			mod->sign = '0';
+		}
 		arg_to_string(mod);
 		while (mod->res_i < max)
+		{
 			mod->res[mod->res_i++] = ' ';
+		}
 		mod->res[mod->res_i] = '\0';
 	}
 	if (mod->flags->zero == '1' && mod->precision == -1)
 	{
-		while (mod->res_i < (max - arg_len))
+		while (mod->res_i < (max - *arg_len))
 			mod->res[mod->res_i++] = '0';
 	}
+	if(mod->flags->plus == '1' && *arg_len == 0)
+		*arg_len += 1;
 }
 
 void		add_sign(t_mod *mod)

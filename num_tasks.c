@@ -58,9 +58,17 @@ int			calc_more_pad(t_mod *mod, int i)
 	{
 		if (mod->frmt_spec == 'p' && is_space(mod->res[i]))
 			return (2);
-		else if (mod->frmt_spec != 'p' && is_empty(mod->res[i]))
-			return (2);
+		else if (mod->frmt_spec != 'p' && is_empty(mod->res[i]) && mod->precision == -1)
+		{
+			if (is_empty(mod->res[i + 1]))
+				return (2);
+			else
+				return (1);	
+		}
 	}
+	if (is_space(mod->res[mod->res_i]))
+		while (is_space(mod->res[mod->res_i]))
+			mod->res_i++;
 	return (0);
 }
 
@@ -69,10 +77,11 @@ void		add_x(t_mod *mod)
 	int		size;
 	char	*tmp;
 	int		i;
-	int		x;
+	int		*x;
 
 	i = 0;
-	x = 0;
+	x = &mod->res_i;
+	*x = 0;
 	tmp = NULL;
 	if (is_zeros(mod->res) && mod->frmt_spec != 'p')
 		return ;
@@ -80,13 +89,13 @@ void		add_x(t_mod *mod)
 	size += calc_x_pad(mod, size);
 	tmp = (char*)ft_memalloc(sizeof(char) * size);
 	if (mod->min_wid != 0 && !ft_isalnum(mod->res[0]))
-		while (!ft_isalnum(mod->res[x + 2]))
-			tmp[i++] = mod->res[x++];
-	x += calc_more_pad(mod, i);
+		while (!ft_isalnum(mod->res[*x + 2]))
+			tmp[i++] = mod->res[*x += 1];
+	*x += calc_more_pad(mod, i);
 	tmp[i++] = '0';
 	tmp[i++] = (mod->frmt_spec == 'X') ? 'X' : 'x';
 	while (i < (size - 1))
-		tmp[i++] = mod->res[x++];
+		tmp[i++] = mod->res[(*x)++];
 	if (mod->res)
 		free(mod->res);
 	mod->res = tmp;

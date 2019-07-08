@@ -25,7 +25,7 @@ void		set_string(t_mod *mod)
 	max = ((arg_len + max) < mod->min_wid) ? mod->min_wid : arg_len + max;
 	mod->res = ft_memalloc(max + 1);
 	if (mod->flags != NULL)
-		add_flags(mod, max, arg_len);
+		add_flags(mod, max, &arg_len);
 	if (mod->res[0] == '\0')
 	{
 		while (mod->res_i < (max - arg_len))
@@ -89,6 +89,9 @@ void		signed_prec_work(t_mod *mod, char *temp, int size)
 
 	i = 0;
 	x = 0;
+	if (mod->flags && mod->flags->hash == '0')
+		if (mod->precision == 0 && is_unsigned(mod->frmt_spec))
+			return ;
 	while ((i < mod->precision || i <= size) && mod->arg_text[x] != '\0')
 	{
 		if (i < (mod->precision - size))
@@ -96,7 +99,7 @@ void		signed_prec_work(t_mod *mod, char *temp, int size)
 		else if (mod->arg_text[x] == '-')
 		{
 			x++;
-			if (i < ((mod->precision - size) + 1) && temp[i - 1] != '0')
+			if (i < ((mod->precision - size)) && temp[i - 1] != '0')
 				temp[i++] = '0';
 		}
 		else
