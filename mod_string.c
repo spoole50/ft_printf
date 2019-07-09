@@ -20,7 +20,10 @@ void			mod_string_char(t_printf *info, t_mod *mod)
 	if (mod->frmt_spec != '%')
 		arg = find_arg(info->arg_begin, mod->arg_num);
 	if (mod->frmt_spec == 'c' || mod->frmt_spec == 'C')
-		mod->arg_text = (char*)(&arg->data.vdata);
+	{
+		mod->arg_text = ft_strnew(1);
+		mod->arg_text[0] = (char)arg->data.vdata;
+	}
 	else if (arg != NULL && arg->data.vdata == NULL)
 		mod->arg_text = "(null)";
 	else if (mod->frmt_spec != '%')

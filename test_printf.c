@@ -236,8 +236,16 @@ int		main(void)
 	// s2 = ft_printf("%f\n", -0.123456);
 	// s1 = printf("%f\n", -0.000039);
 	// s2 = ft_printf("%f\n", -0.000039);
-	s1 = printf("this %f float\n", 1.5);
-	s2 = ft_printf("this %f float\n", 1.5);
+	// s1 = printf("this %f float\n", 1.5);
+	// s2 = ft_printf("this %f float\n", 1.5);
+	// s1 = printf("%f\n", (double)-0);
+	// s2 = ft_printf("%f\n", (double)-0);
+	// s1 = printf("Il fait au moins %f\n", (double)-8000);
+	// s2 = ft_printf("Il fait au moins %f\n", (double)-8000);
+	// s1 = printf("%%f Lydie == |%f|\n", (double)'L'+'y'+'d'+'i'+'e');
+	// s2 = ft_printf("%%f Lydie == |%f|\n", (double)'L'+'y'+'d'+'i'+'e');
+	s1 = printf("√†\n");
+	s2 = ft_printf("√†\n");
 	ft_printf("sysSize:%d ftSize:%d Match:%c\n", s1, s2, (s1==s2)?'Y':'N');
 	return (0);
 }
