@@ -37,7 +37,8 @@ int			calc_x_pad(t_mod *mod, int size)
 	{
 		if (is_space(mod->res[i]))
 			sp++;
-		if (mod->frmt_spec == 'p' && mod->flags && mod->flags->zero == '1' && mod->res[i] == '0')
+		if (mod->frmt_spec == 'p' && mod->flags &&\
+		mod->flags->zero == '1' && mod->res[i] == '0')
 			sp++;
 	}
 	i = size;
@@ -58,12 +59,13 @@ int			calc_more_pad(t_mod *mod, int i)
 	{
 		if (mod->frmt_spec == 'p' && is_space(mod->res[i]))
 			return (2);
-		else if (mod->frmt_spec != 'p' && is_empty(mod->res[i]) && mod->precision == -1)
+		else if (mod->frmt_spec != 'p' && is_empty(mod->res[i])\
+		&& mod->precision == -1)
 		{
 			if (is_empty(mod->res[i + 1]))
 				return (2);
 			else
-				return (1);	
+				return (1);
 		}
 	}
 	if (is_space(mod->res[mod->res_i]))

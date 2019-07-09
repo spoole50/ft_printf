@@ -12,18 +12,6 @@
 
 #include "includes/ft_printf.h"
 
-int			check_arg(char *str, int i)
-{
-	if (ft_isnum(str[i]) || is_space(str[i]))
-	{
-		while (ft_isnum(str[i]) || is_space(str[i]))
-			i++;
-		if (str[i] == '$')
-			return (1);
-	}
-	return (0);
-}
-
 void		handle_len_mod(t_printf *info, t_mod *mod)
 {
 	int		i;
@@ -78,14 +66,24 @@ void		parse_spec(t_printf *info, t_mod *mod)
 	INDEX++;
 }
 
+void		create_arg(t_printf *info, t_mod *mod, va_list ap)
+{
+	if (check_arg(INPUT, INDEX))
+		mod->arg_num = handle_mult_arg(info, ap,\
+		mod->frmt_spec, mod->len_mod[0]);
+	else
+		mod->arg_num = add_next_arg(info, ap,\
+		mod->frmt_spec, mod->len_mod[0]);
+}
+
 int			handle_mod(t_printf *info, va_list ap)
 {
 	t_mod	*mod;
 	int		valid;
 
 	mod = t_mod_init();
-	valid = validate_conv_spec(info, mod);
-	if (valid == -1 || !is_conv(mod->frmt_spec))
+	if ((valid = validate_conv_spec(info, mod)) == -1\
+	|| !is_conv(mod->frmt_spec))
 	{
 		free(mod);
 		if (valid == -1)
@@ -97,12 +95,7 @@ int			handle_mod(t_printf *info, va_list ap)
 	if (mod->frmt_spec == '%')
 		mod->arg_text = "%";
 	else
-	{
-		if (check_arg(INPUT, INDEX))
-			mod->arg_num = handle_mult_arg(info, ap, mod->frmt_spec, mod->len_mod[0]);
-		else
-			mod->arg_num = add_next_arg(info, ap, mod->frmt_spec, mod->len_mod[0]);
-	}
+		create_arg(info, mod, ap);
 	sort_spec(info, mod);
 	clean_tmod(mod);
 	return (0);

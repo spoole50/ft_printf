@@ -109,8 +109,10 @@ t_printf				*t_printf_init(char *in);
 ** Argument Node Functions
 ** arg_node.c
 */
-int						handle_mult_arg(t_printf *info, va_list ap, char fs, char lm);
-int						add_next_arg(t_printf *info, va_list ap, char fs, char lm);
+int						handle_mult_arg(t_printf *info,\
+va_list ap, char fs, char lm);
+int						add_next_arg(t_printf *info,\
+va_list ap, char fs, char lm);
 t_arg_node				*arg_node_init(t_printf *info);
 t_arg_node				*find_arg(t_arg_node *begin, int arg_num);
 
@@ -178,6 +180,7 @@ void					signed_prec(t_mod *mod);
 void					check_zeros(t_mod *mod);
 int						count_empty(char *str);
 void					add_flags(t_mod *mod, int max, int *arg_len);
+int						check_arg(char *str, int i);
 
 /*
 ** Num Task Functions
@@ -194,6 +197,5 @@ char					*unsigned_len_mod(t_arg_node *arg,\
 int						read_number(t_printf *info);
 int						handle_mod(t_printf *info, va_list ap);
 void					set_string(t_mod *mod);
-int						check_arg(char *str, int i);
 
 #endif

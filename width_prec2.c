@@ -12,6 +12,18 @@
 
 #include "includes/ft_printf.h"
 
+int			check_arg(char *str, int i)
+{
+	if (ft_isnum(str[i]) || is_space(str[i]))
+	{
+		while (ft_isnum(str[i]) || is_space(str[i]))
+			i++;
+		if (str[i] == '$')
+			return (1);
+	}
+	return (0);
+}
+
 void		check_zeros(t_mod *mod)
 {
 	int		i;
@@ -27,7 +39,8 @@ void		check_zeros(t_mod *mod)
 		if (mod->arg_text[0] == '0')
 			return ;
 		i = 1 + ft_strlen(mod->arg_text);
-		if (mod->min_wid == 0 || mod->flags->zero == '0' || i > mod->min_wid || mod->precision != -1) 
+		if (mod->min_wid == 0 || mod->flags->zero == '0' || i > mod->min_wid\
+		|| mod->precision != -1)
 			mod->precision = (i > mod->precision) ? i : mod->precision;
 	}
 }
@@ -67,7 +80,7 @@ void		add_flags(t_mod *mod, int max, int *arg_len)
 		while (mod->res_i < (max - *arg_len))
 			mod->res[mod->res_i++] = '0';
 	}
-	if(mod->flags->plus == '1' && *arg_len == 0)
+	if (mod->flags->plus == '1' && *arg_len == 0)
 		*arg_len += 1;
 }
 
