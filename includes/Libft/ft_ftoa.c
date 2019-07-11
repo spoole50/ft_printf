@@ -12,17 +12,17 @@
 
 #include "libft.h"
 
-void			ftoa_help(t_ftoa *var)
+void			ftoa_help(t_ftoa *var, int precision)
 {
 	if ((*var).neg == 1)
 		(*var).res[(*var).i++] = '-';
-	if ((*var).sub_z == 1 || (*var).clean[0] == '0')
+	if (((*var).sub_z == 1 || (*var).clean[0] == '0') && precision != 0)
 		(*var).res[(*var).i++] = '0';
 	while (*((*var).temp) != '\0' && (*var).i < (*var).size)
 	{
 		if ((*var).i == (*var).dot)
 			(*var).res[(*var).i++] = '.';
-		else if ((*var).size - (*var).i > (*var).str_len &&\
+		else if ((*var).size - (*var).i - 1 > (*var).str_len &&\
 		((*var).sub_z == 1 || (*var).clean[0] == '0'))
 			(*var).res[(*var).i++] = '0';
 		else
@@ -36,26 +36,34 @@ void			str_set(t_ftoa *var, int precision)
 	(*var).temp = ft_itoab_unsigned((*var).tmp, 10);
 	(*var).clean = (*var).temp;
 	(*var).str_len = ft_strlen((*var).temp);
-	(*var).size = ((*var).str_len < precision) ?\
-	precision + (*var).sub_z : (*var).str_len;
-	(*var).size += ((*var).neg == 1) ? 3 : 2;
-	(*var).dot = ((*var).temp[0] == '0') ? 1 : ((*var).size - precision) - 2;
+	(*var).size = ((*var).str_len <= precision)\
+	? precision + (*var).sub_z : (*var).str_len;
+	if (precision == 0)
+	{
+		(*var).size += ((*var).neg == 1) ? 2 : 1;
+		(*var).dot = -1;
+		(*var).sub_z = 0;
+	}
+	else
+	{
+		(*var).size += ((*var).neg == 1) ? 3 : 2;
+		(*var).size += ((*var).temp[0] == '0') ? 1 : 0;
+		(*var).dot = ((*var).temp[0] == '0')\
+		? 1 : ((*var).size - precision) - 2;
+	}
 	(*var).res = (char*)ft_memalloc(sizeof(char) * ((*var).size));
 }
 
 char			*ft_ftoa(long double num, int precision)
 {
-	t_ftoa	var;
+	t_ftoa		var;
 
 	var.size = precision;
 	var.i = 0;
 	var.neg = 0;
 	var.sub_z = 0;
 	if ((num > 0 && num < 1) || (num < 0 && num > -1))
-	{
 		var.sub_z = 1;
-		precision--;
-	}
 	while (var.size--)
 		num *= 10;
 	if (num < 0)
@@ -66,6 +74,6 @@ char			*ft_ftoa(long double num, int precision)
 	else
 		var.tmp = num + 0.5;
 	str_set(&var, precision);
-	ftoa_help(&var);
+	ftoa_help(&var, precision);
 	return (var.res);
 }

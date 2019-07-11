@@ -57,7 +57,8 @@ void			clean_tmod(t_mod *mod)
 	x = mod->frmt_spec;
 	if (mod->flags != NULL)
 		free(mod->flags);
-	if (mod->arg_text != NULL && !is_text(x) && x != 'p')
+	if (mod->arg_text != NULL && x != 's' &&\
+	x != 'S' && x != '%' && x != 'p')
 		if (ft_strcmp(mod->arg_text, "-9223372036854775808"))
 			free(mod->arg_text);
 	free(mod);

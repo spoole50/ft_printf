@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include "includes/ft_printf.h"
+#include <limits.h>
 
 int		main(void)
 {
@@ -22,7 +23,7 @@ int		main(void)
 	// ft_printf("%+ld\n", 2147483648);
 	// printf("%+ld\n", 2147483648);
 	// ft_printf("Test 1: This %s seeing if string additon works\n", "is a test");
-	//ft_printf("Test 2: %-10s %s\n", "this", "is");
+	// ft_printf("Test 2: %-10s %s\n", "this", "is");
 	// ft_printf("Test 3: %s\n", "abc");
 	// ft_printf("Test 4: %      s  \n", "this is a string");
 	// ft_printf("Test 5: %10s is a string\n", "this");
@@ -114,8 +115,8 @@ int		main(void)
 	// s2 = ft_printf("% 20.12ld et % 05D% 4.8hi !\n", 0x11ffaa147, 24, (short)-2345);
 	// s1 = printf("% 20.12ld\n", 0x11ffaa147);
 	// s2 = ft_printf("% 20.12ld\n", 0x11ffaa147);
-	// s1 = printf("% 05D", 24);
-	// s2 = ft_printf("% 05D", 24);
+	// s1 = printf("% 05D\n", 24);
+	// s2 = ft_printf("% 05D\n", 24);
 	// s1 = printf("%.8d\n", -2345);
 	// s2 = ft_printf("%.8d\n", -2345);
 	// s1 = printf("% 4.8hi\n", (short)-2345);
@@ -142,8 +143,8 @@ int		main(void)
 	// s2 = ft_printf("%#-08x\n", 42);
 	// s1 = printf("cc%#.4X et %#0012x %#04hX !!\n", 0xaef, 0xe, (unsigned short)0);
 	// s2 = ft_printf("cc%#.4X et %#0012x %#04hX !!\n", 0xaef, 0xe, (unsigned short)0);
-	// s1 = printf("osef ! %#9llX et %-12hhx\n", (unsigned long long)-1248759650, (unsigned char)-1478223695);
-	// s2 = ft_printf("osef ! %#9llX et %-12hhx\n", (unsigned long long)-1248759650, (unsigned char)-1478223695);
+	// s1 = printf("osef ! %#9llX et %-12x\n", (unsigned long long)-1248759650, (unsigned char)-1478223695);
+	// s2 = ft_printf("osef ! %#9llX et %-12x\n", (unsigned long long)-1248759650, (unsigned char)-1478223695);
 	// s1 = printf("%#9llX\n", (unsigned long long)-1248759650);
 	// s2 = ft_printf("%#9llX\n", (unsigned long long)-1248759650);
 	// s1 = printf("%#04hX\n", (unsigned short)0);
@@ -196,28 +197,28 @@ int		main(void)
 	// s2 = ft_printf("%hu\n", 4294967296);
 	// s1 = printf("%.7f\n", 132.4567891);
 	// s2 = ft_printf("%.7f\n", 132.4567891);
-	// s1 = printf("%1$s %1$s %2$s\n", "one", "two");
-	// s2 = ft_printf("%1$s %1$s %2$s\n", "one", "two");
+	s1 = printf("%2$s %1$s %1$s\n", "one", "two");
+	s2 = ft_printf("%2$s %1$s %1$s\n", "one", "two");
 	// s1 = printf("%lu\n", -42);
 	// s2 = ft_printf("%lu\n", -42);
-	//s1 = printf("%\n");
-	//s2 = ft_printf("%\n");
-	//s1 = printf("{%f}{%lf}\n", 1444565444646.6465424242242, 1444565444646.6465424242242l);
-	//s2 = ft_printf("{%f}{%lf}\n", 1444565444646.6465424242242, 1444565444646.6465424242242l);
-	//s1 = printf("{%05p}\n", 0);
-	//s2 = ft_printf("{%05p}\n", 0);
-	//s1 = printf("% .4i\n", -2372);
-	//s2 = ft_printf("% .4i\n", -2372);
-	//s1 = printf("%+5.0i\n", 0);
-	//s2 = ft_printf("%+5.0i\n", 0);
-	//s1 = printf("%+-5.0i\n", 0);
-	//s2 = ft_printf("%+-5.0i\n", 0);
-	//s1 = printf("%#5x\n", 52625);
-	//s2 = ft_printf("%#5x\n", 52625);
-	//s1 = printf("%#2.7x\n", 3267);
-	//s2 = ft_printf("%#2.7x\n", 3267);
-	//s1 = printf("%#8.5x\n", 34);
-	//s2 = ft_printf("%#8.5x\n", 34);
+	// s1 = printf("%\n");
+	// s2 = ft_printf("%\n");
+	// s1 = printf("{%f}{%lf}\n", 1444565444646.6465424242242, 1444565444646.6465424242242l);
+	// s2 = ft_printf("{%f}{%lf}\n", 1444565444646.6465424242242, 1444565444646.6465424242242l);
+	// s1 = printf("{%05p}\n", 0);
+	// s2 = ft_printf("{%05p}\n", 0);
+	// s1 = printf("% .4i\n", -2372);
+	// s2 = ft_printf("% .4i\n", -2372);
+	// s1 = printf("%+5.0i\n", 0);
+	// s2 = ft_printf("%+5.0i\n", 0);
+	// s1 = printf("%+-5.0i\n", 0);
+	// s2 = ft_printf("%+-5.0i\n", 0);
+	// s1 = printf("%#5x\n", 52625);
+	// s2 = ft_printf("%#5x\n", 52625);
+	// s1 = printf("%#2.7x\n", 3267);
+	// s2 = ft_printf("%#2.7x\n", 3267);
+	// s1 = printf("%#8.5x\n", 34);
+	// s2 = ft_printf("%#8.5x\n", 34);
 	// s1 = printf("%#05o\n", 43);
 	// s2 = ft_printf("%#05o\n", 43);
 	// s1 = printf("%#07o\n", 698334);
@@ -244,8 +245,22 @@ int		main(void)
 	// s2 = ft_printf("Il fait au moins %f\n", (double)-8000);
 	// s1 = printf("%%f Lydie == |%f|\n", (double)'L'+'y'+'d'+'i'+'e');
 	// s2 = ft_printf("%%f Lydie == |%f|\n", (double)'L'+'y'+'d'+'i'+'e');
-	s1 = printf("√†\n");
-	s2 = ft_printf("√†\n");
+	// s1 = printf("√†\n");
+	// s2 = ft_printf("√†\n");
+	// s1 = printf("%f\n", 0.0894255);
+	// s2 = ft_printf("%f\n", 0.0894255);
+	// s1 = printf("%f\n", 0.000039);
+	// s2 = ft_printf("%f\n", 0.000039);
+	// s1 = printf("%.4f\n", 0.99999999);
+	// s2 = ft_printf("%.4f\n", 0.99999999);
+	// s1 = printf("%f\n", (double)-0);
+	// s2 = ft_printf("%f\n", (double)-0);
+	s1 = printf("%.3Lf\n", 0.375l);
+	s2 = ft_printf("%.3Lf\n", 0.375l);
+	// s1 = printf("%llu\n", 13456789456123);
+	// s2 = ft_printf("%llu\n", 13456789456123);
+	// s1 = printf("%i %o %u %#x %#X %c\n", 42,42,42,42,42,42);
+	// s2 = ft_printf("%i %o %u %#x %#X %c\n", 42,42,42,42,42,42);
 	ft_printf("sysSize:%d ftSize:%d Match:%c\n", s1, s2, (s1==s2)?'Y':'N');
 	return (0);
 }

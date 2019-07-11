@@ -36,6 +36,8 @@ int			validate_conv_spec(t_printf *info, t_mod *mod)
 	INDEX++;
 	if ((len = is_invalid_conv_spec(INPUT, INDEX)) == -1)
 		return (-1);
+	if (INPUT[INDEX + len - 1] == 'L')
+		mod->len_mod[0] = 'L';
 	mod->frmt_spec = INPUT[INDEX + len];
 	return (0);
 }
@@ -91,12 +93,12 @@ int			handle_mod(t_printf *info, va_list ap)
 		else
 			return (0);
 	}
-	parse_spec(info, mod);
 	if (mod->frmt_spec == '%')
 		mod->arg_text = "%";
 	else
 		create_arg(info, mod, ap);
+	parse_spec(info, mod);
 	sort_spec(info, mod);
-	clean_tmod(mod);
+	//clean_tmod(mod);
 	return (0);
 }
